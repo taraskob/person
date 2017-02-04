@@ -1,13 +1,13 @@
 import java.io.IOException;
 import java.util.TimerTask;
 class LTimerTask extends TimerTask {
-    private Controller filectrl;
+    private Controller ctrl;
     LTimerTask(Controller fcntr) {
-        this.filectrl=fcntr;
+        this.ctrl=fcntr;
     }
     public void run() {
         try {
-            filectrl.syncro();
+            ctrl.syncro();
         } catch (IOException e) {
             e.printStackTrace();
         }

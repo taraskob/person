@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-public class Controller {
+class Controller {
     private List<ChangeHandler> listener = new ArrayList<>();
     private Person person=new Person();
     private LTimerTask mytask=new LTimerTask(this);
@@ -18,15 +18,15 @@ public class Controller {
             e.printStackTrace();}
     }
     void syncro() throws IOException {
-        Person new_data=new Person();
-        new_data.setData();
-        if(!person.compareData(new_data))
+        Person new_person=new Person();
+        new_person.setData();
+        if(!person.compareData(new_person))
         {
-            person=new_data;
+            person=new_person;
             onChange();
         }
     }
-    Person getData() {return person;}
+    Person getPersom() {return person;}
     void onChange() {
         for(ChangeHandler item:listener){
             item.onChange();

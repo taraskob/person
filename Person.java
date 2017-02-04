@@ -1,16 +1,17 @@
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Date;
 public class Person {
-    private ArrayList<String> current_person=new ArrayList<String>();
-    File file;
-    String name;
-    String surname;
-    String birthday;
+    private File file;
+    private String name;
+    private String surname;
+    private String birthday;
+    private Date date=new Date();
+    SimpleDateFormat sdf=new SimpleDateFormat("dd.MM.YY");
     void setName(String name) {
      this.name=name;
     }
@@ -30,43 +31,31 @@ public class Person {
         return birthday;
     }
     void setData() {
-        current_person.add(readPerson());
+        String[] linefields = readPerson();
+        if(linefields.length<3) {
+            setName("Name");
+            setSurname("Surname");
+            setBirthday(toString());
     }
-    void saveInput(String[] inputdata) throws IOException {
-        for(int i=0;i<inputdata.length;i++)
-        {  if (current_person.size() >= inputdata.length) {
-            current_person.set(i, inputdata[i]);
-        }
         else {
-            current_person.add(i, inputdata[i]);
-        }}
-
+            setName(linefields[0]);
+            setSurname(linefields[1]);
+            setBirthday(linefields[2]);}
     }
-    private boolean isEqual(ArrayList<String> current_data,ArrayList<String> new_data){
-        if(current_data.size()!=new_data.size()){
-            return false;}
-        else{
-            for(int i=0;i<current_data.size();i++){
-                if(!myEquals(current_data.get(i),new_data.get(i)))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }}
+    boolean compareData(Person new_person) throws IOException {
+        if(!myEquals(this.name,new_person.name)) {
+            return false;
+        }
+        if(!myEquals(this.surname,new_person.surname)) {
+            return false;
+        }
+        if(!myEquals(this.birthday,new_person.birthday)) {
+            return false;
+        }
+        return true;
+    }
     private boolean myEquals(String str1, String str2) {
         return str1 == null ? str2 == null : str1.equals(str2);
-    }
-    boolean compareData(Person new_data) throws IOException {
-        if(isEqual(current_person,strToAList(new_data.readPerson()))) {
-            return true;
-        }
-        return false;
-    }
-    ArrayList<String> strToAList(String inputtext)  {
-        ArrayList<String> al=new ArrayList<String>();
-        al.add(inputtext);
-        return al;
     }
     void writePerson() throws IOException {
         try {
@@ -80,7 +69,7 @@ public class Person {
          writer.write(getBirthday()+"\r\n");
          writer.close();
     }
-    String readPerson() {
+    String[] readPerson() {
         StringBuilder line = new StringBuilder();
         try {
             filexists("Person.dat");
@@ -101,17 +90,24 @@ public class Person {
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
-        return line.toString();
+        return line.toString().split("\n");
     }
     void filexists(String fileName) throws IOException {
         file = new File(fileName);
         if (!file.exists()){
             String line="";
-            FileWriter writer = new FileWriter("Data.dat");
+            FileWriter writer = new FileWriter("Person.dat");
             {
                 writer.write(line);
             }
             writer.close();
         }
+    }
+    public String toString(){
+        String str=sdf.format(getDate());
+        return str; }
+    public Date getDate() {
+        date=new Date();
+        return date;
     }
 }

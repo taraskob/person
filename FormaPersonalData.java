@@ -1,32 +1,30 @@
-import java.beans.*;
 import  java.awt.*;
 import  java.awt.event.*;
 import  javax.swing.*;
 import java.io.IOException;
 import  java.text.*;
-import  javax.swing.text.*;
 import  java.util.*;
 public class FormaPersonalData implements ChangeHandler {
-        DateFormat df;
-        JLabel jlab;
-        JTextField jtfName;
-        JTextField jtfSurname;
-        JFormattedTextField jftfBirthday;
-        JButton jbtnSave;
-        Controller ctrl=new Controller();
-        public FormaPersonalData() {
+    private DateFormat df;
+    private JLabel jlab;
+    private JTextField jtfName;
+    private JTextField jtfSurname;
+    private JFormattedTextField jftfBirthday;
+    private JButton jbtnSave;
+    private Controller ctrl=new Controller();
+        FormaPersonalData() {
             JFrame jfrm = new JFrame("Person");
             jfrm.getContentPane().setLayout(new FlowLayout());
             jfrm.setSize(240, 270);
             jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             jlab = new JLabel();
             JLabel jlabSeparator=new JLabel();
-            jlabSeparator.setPreferredSize(new Dimension(200,7));
+            jlabSeparator.setPreferredSize(new Dimension(200,20));
             jtfName = new JTextField();
             jtfSurname = new JTextField();
             jtfName.setColumns(15);
             jtfSurname.setColumns(15);
-            df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+            df = DateFormat.getDateInstance(DateFormat.SHORT);
             jftfBirthday = new JFormattedTextField(df);
             jftfBirthday.setColumns(15);
             jftfBirthday.setValue(new Date());
@@ -54,13 +52,21 @@ public class FormaPersonalData implements ChangeHandler {
             jfrm.setVisible(true);
         }
     private void load() {
-            String[] linefields = ctrl.getData().readPerson().split("\n");
-    }
+        String[] linefields = ctrl.getPersom().readPerson();
+        if(linefields.length<3) {
+        jtfName.setText("Name");
+        jtfSurname.setText("Surname");
+        jftfBirthday.setValue(new Date());}
+        else {
+            jtfName.setText(linefields[0]);
+            jtfSurname.setText(linefields[1]);
+            jftfBirthday.setText(linefields[2]);}
+        }
     private void saveinput() throws IOException {
-        ctrl.getData().setName(jtfName.getText());
-        ctrl.getData().setSurname(jtfSurname.getText());
-        ctrl.getData().setBirthday(jftfBirthday.getText());
-        ctrl.getData().writePerson();
+        ctrl.getPersom().setName(jtfName.getText());
+        ctrl.getPersom().setSurname(jtfSurname.getText());
+        ctrl.getPersom().setBirthday(jftfBirthday.getText());
+        ctrl.getPersom().writePerson();
         ctrl.onChange();
     }
     public void onChange() {
