@@ -19,8 +19,8 @@ class Controller {
     }
     void syncro() throws IOException {
         Person new_person=new Person();
-        new_person.setData();
-        if(!person.compareData(new_person))
+        new_person.setPerson();
+        if(!person.comparePerson(new_person))
         {
             person=new_person;
             onChange();

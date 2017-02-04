@@ -30,7 +30,7 @@ public class Person {
     String getBirthday() {
         return birthday;
     }
-    void setData() {
+    void setPerson() {
         String[] linefields = readPerson();
         if(linefields.length<3) {
             setName("Name");
@@ -42,7 +42,7 @@ public class Person {
             setSurname(linefields[1]);
             setBirthday(linefields[2]);}
     }
-    boolean compareData(Person new_person) throws IOException {
+    boolean comparePerson(Person new_person) throws IOException {
         if(!myEquals(this.getName(),new_person.getName())) {
             return false;
         }
