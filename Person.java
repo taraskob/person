@@ -43,13 +43,13 @@ public class Person {
             setBirthday(linefields[2]);}
     }
     boolean compareData(Person new_person) throws IOException {
-        if(!myEquals(this.name,new_person.name)) {
+        if(!myEquals(this.getName(),new_person.getName())) {
             return false;
         }
-        if(!myEquals(this.surname,new_person.surname)) {
+        if(!myEquals(this.getSurname(),new_person.getSurname())) {
             return false;
         }
-        if(!myEquals(this.birthday,new_person.birthday)) {
+        if(!myEquals(this.getBirthday(),new_person.getBirthday())) {
             return false;
         }
         return true;
