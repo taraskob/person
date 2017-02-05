@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -17,7 +18,7 @@ class Controller {
         catch (InterruptedException e) {
             e.printStackTrace();}
     }
-    void syncro() throws IOException {
+    void syncro() throws IOException, ParseException {
         Person new_person=new Person();
         new_person.setPerson();
         if(!person.comparePerson(new_person))

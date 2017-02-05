@@ -1,6 +1,7 @@
 import  java.awt.*;
 import  java.awt.event.*;
 import  javax.swing.*;
+import javax.swing.text.DateFormatter;
 import java.io.IOException;
 import  java.text.*;
 import  java.util.*;
@@ -12,7 +13,7 @@ public class FormaPersonalData implements ChangeHandler {
     private JFormattedTextField jftfBirthday;
     private JButton jbtnSave;
     private Controller ctrl=new Controller();
-        FormaPersonalData() {
+        FormaPersonalData() throws ParseException {
             JFrame jfrm = new JFrame("Person");
             jfrm.getContentPane().setLayout(new FlowLayout());
             jfrm.setSize(240, 270);
@@ -24,8 +25,11 @@ public class FormaPersonalData implements ChangeHandler {
             jtfSurname = new JTextField();
             jtfName.setColumns(15);
             jtfSurname.setColumns(15);
-            df = DateFormat.getDateInstance(DateFormat.SHORT);
-            jftfBirthday = new JFormattedTextField(df);
+            df=new SimpleDateFormat("dd.MM.yyyy");
+            DateFormatter dateFormatter = new DateFormatter(df);
+            dateFormatter.setAllowsInvalid(true);
+            dateFormatter.setOverwriteMode(true);
+            jftfBirthday = new JFormattedTextField(dateFormatter);
             jftfBirthday.setColumns(15);
             jftfBirthday.setValue(new Date());
             jbtnSave = new JButton("Save Personal Data");
@@ -36,6 +40,8 @@ public class FormaPersonalData implements ChangeHandler {
                     try {
                         saveinput();
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
@@ -62,10 +68,15 @@ public class FormaPersonalData implements ChangeHandler {
             jtfSurname.setText(linefields[1]);
             jftfBirthday.setText(linefields[2]);}
         }
-    private void saveinput() throws IOException {
+    private void saveinput() throws IOException, ParseException {
         ctrl.getPersom().setName(jtfName.getText());
         ctrl.getPersom().setSurname(jtfSurname.getText());
-        ctrl.getPersom().setBirthday(jftfBirthday.getText());
+
+        try {
+            ctrl.getPersom().setBirthday(jftfBirthday.getText());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ctrl.getPersom().writePerson();
         ctrl.onChange();
     }

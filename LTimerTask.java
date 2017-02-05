@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.TimerTask;
 class LTimerTask extends TimerTask {
     private Controller ctrl;
@@ -9,6 +10,8 @@ class LTimerTask extends TimerTask {
         try {
             ctrl.syncro();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

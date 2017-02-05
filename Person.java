@@ -1,17 +1,14 @@
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.Date;
 public class Person {
     private File file;
     private String name;
     private String surname;
-    private String birthday;
-    private Date date=new Date();
-    SimpleDateFormat sdf=new SimpleDateFormat("dd.MM.YY");
+    private Date birthday;
+    SimpleDateFormat sdf=new SimpleDateFormat("dd.MM.yyyy");
     void setName(String name) {
      this.name=name;
     }
@@ -24,19 +21,22 @@ public class Person {
     String getSurname() {
         return surname;
     }
-    void setBirthday(String birthday) {
+    void setBirthday(String birthday) throws ParseException {
+        this.birthday=sdf.parse(birthday);
+    }
+    void setBirthday(Date birthday)  {
         this.birthday=birthday;
     }
-    String getBirthday() {
+    Date getBirthday() {
         return birthday;
     }
-    void setPerson() {
+    void setPerson() throws ParseException {
         String[] linefields = readPerson();
         if(linefields.length<3) {
             setName("Name");
             setSurname("Surname");
-            setBirthday(toString());
-    }
+            setBirthday(new Date());
+        }
         else {
             setName(linefields[0]);
             setSurname(linefields[1]);
@@ -49,7 +49,7 @@ public class Person {
         if(!myEquals(this.getSurname(),new_person.getSurname())) {
             return false;
         }
-        if(!myEquals(this.getBirthday(),new_person.getBirthday())) {
+        if(!(this.getBirthday().equals(new_person.getBirthday()))) {
             return false;
         }
         return true;
@@ -58,56 +58,9 @@ public class Person {
         return str1 == null ? str2 == null : str1.equals(str2);
     }
     void writePerson() throws IOException {
-        try {
-            filexists("Person.dat");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        FileWriter writer = new FileWriter("Person.dat");
-         writer.write(getName()+"\r\n");
-         writer.write(getSurname()+"\r\n");
-         writer.write(getBirthday()+"\r\n");
-         writer.close();
+        new ReadSaveFile().writePerson(getName(),getSurname(),sdf.format(getBirthday()));
     }
     String[] readPerson() {
-        StringBuilder line = new StringBuilder();
-        try {
-            filexists("Person.dat");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
-            try {
-                String s;
-                while ((s = in.readLine()) != null) {
-                    line.append(s);
-                    line.append("\n");
-                }
-            } finally {
-                in.close();
-            }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-        return line.toString().split("\n");
+      return  new ReadSaveFile().readPerson();
     }
-    void filexists(String fileName) throws IOException {
-        file = new File(fileName);
-        if (!file.exists()){
-            String line="";
-            FileWriter writer = new FileWriter("Person.dat");
-            {
-                writer.write(line);
-            }
-            writer.close();
-        }
     }
-    public String toString(){
-        String str=sdf.format(getDate());
-        return str; }
-    public Date getDate() {
-        date=new Date();
-        return date;
-    }
-}
