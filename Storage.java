@@ -5,13 +5,13 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 public class Storage {
     private File file;
-    void writeInput(Object input) throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
+    void writeInput(Object input, String filename) throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
      try {
-            filexists("Person.dat");
+            filexists(filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        FileWriter writer = new FileWriter("Person.dat");
+        FileWriter writer = new FileWriter(filename);
         Class writeclass = input.getClass();
         Method[] inputmethods= writeclass.getDeclaredMethods();
         for (Method method : inputmethods) {
@@ -30,17 +30,17 @@ public class Storage {
         file = new File(fileName);
         if (!file.exists()){
             String line="";
-            FileWriter writer = new FileWriter("Person.dat");
+            FileWriter writer = new FileWriter(fileName);
             {
                 writer.write(line);
             }
             writer.close();
         }
     }
-    String[] readPerson() {
+    String[] readFile(String filename) {
         StringBuilder line = new StringBuilder();
         try {
-            filexists("Person.dat");
+            filexists(filename);
         } catch (IOException e) {
             e.printStackTrace();
         }

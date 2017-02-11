@@ -6,6 +6,7 @@ public class MainPersona {
             public void run() {
                 try {
                     new FormaPersonalData();
+                    new FormaOrganizationData();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

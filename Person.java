@@ -1,44 +1,34 @@
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
  class Person  {
     private String name;
     private String surname;
-    private Date birthday;
-    void setName(String name) {
-        this.name = name;
-    }
+    private Date birthday=new Date();
     String getName() {
-        return name;
-    }
-    void setSurname(String surname) {
-        this.surname = surname;
+       return name;
     }
     String getSurname() {
         return surname;
     }
-    void setBirthday(String birthday) throws ParseException {
-        this.birthday = new SimpleDateFormat("dd.MM.yyyy").parse(birthday);
-    }
-    void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
     Date getBirthday() {
         return birthday;
     }
-    void setPerson(String[] strings) throws ParseException {
-        String[] linefields = strings;
-        if (linefields.length < 3) {
-            setName("Name");
-            setSurname("Surname");
-            setBirthday(new Date());
-        } else {
-            setName(linefields[0]);
-            setSurname(linefields[1]);
-            setBirthday(linefields[2]);
-        }
-    }
+    void setPerson(String[] linefields) throws ParseException, IllegalAccessException {
+        Field[] setFields = this.getClass().getDeclaredFields();
+        int i=0;
+        if (linefields.length >= setFields.length){
+        for (Field field : setFields){
+               if(!field.getType().getName().endsWith("Date"))
+                    field.set(this, linefields[i]);
+                else
+                    field.set(this, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
+                i++;
+              }
+              }
+ }
     boolean comparePerson(Person another_person) throws IOException {
         if (!myEquals(this.getName(), another_person.getName())) {
             return false;

@@ -7,6 +7,7 @@ import java.util.Timer;
 class Controller {
     private List<ChangeHandler> listener = new ArrayList<>();
     private Person person=new Person();
+    private Organization organization=new Organization();
     private Storage storage=new Storage();
     private LTimerTask mytask=new LTimerTask(this);
     private Timer compTimer=new Timer(true);
@@ -20,9 +21,15 @@ class Controller {
         catch (InterruptedException e) {
             e.printStackTrace();}
     }
-    void syncro() throws IOException, ParseException {
+    void syncro() throws IOException, ParseException, IllegalAccessException, InstantiationException {
         Person another_person=new Person();
-        another_person.setPerson(readFile());
+        try {
+            another_person.setPerson(readFile(getPersom().getClass().getName()+".dat"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         if(!person.comparePerson(another_person))
         {
             person=another_person;
@@ -30,15 +37,21 @@ class Controller {
         }
     }
     Person getPersom() {return person;}
+    Organization getOrganization() {return organization;}
     Storage getStorage() {return storage;}
-    void wrtiteInput() throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, IOException
-    {getStorage().writeInput(getPersom());}
-    String[] readFile() {
-        return getStorage().readPerson();
+    void wrtiteInput(String filename,Object input) throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, IOException
+    {getStorage().writeInput(input,filename);}
+    String[] readFile(String filename) {
+        return getStorage().readFile(filename);
     }
-    void onChange() {
+    void onChange() throws ParseException, IllegalAccessException {
         for(ChangeHandler item:listener){
             item.onChange();
         }
     }
+class Gen<T> {
+        T ob;
+        Gen(T o) {ob=o;}
+       T getob() {return ob;}
+}
 }

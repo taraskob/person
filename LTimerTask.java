@@ -13,6 +13,10 @@ class LTimerTask extends TimerTask {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
     }
 }
