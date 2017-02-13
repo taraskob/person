@@ -50,6 +50,8 @@ class FormaPersonalData implements ChangeHandler {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
                         e.printStackTrace();
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -75,10 +77,9 @@ class FormaPersonalData implements ChangeHandler {
             surname.setText(linefields[1]);
             birthday.setText(linefields[2]);}
         }
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
         String[] lines={name.getText(),surname.getText(),birthday.getText()};
-        ctrl.getPerson().setFields(lines);
-        ctrl.wrtiteInput(ctrl.getPerson());
+        ctrl.wrtiteInput(ctrl.getPerson(),lines);
         ctrl.onChange();
         }
     public void onChange() {

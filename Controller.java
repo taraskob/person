@@ -58,8 +58,16 @@ class Controller {
     Person getPerson() {return person;}
     Organization getOrganization() {return organization;}
     Storage getStorage() {return storage;}
-    void wrtiteInput(Object input) throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, IOException
-    {getStorage().writeInput(input);}
+    void wrtiteInput(Object input, String[] lines) throws InvocationTargetException, NoSuchFieldException,
+            IllegalAccessException,IOException, NoSuchMethodException
+    {
+    Class cl = input.getClass();
+    Class[] paramTypes = new Class[] {java.lang.String[].class};
+    Method setmethod = cl.getDeclaredMethod("setFields",paramTypes);
+    Object[] setargs = new Object[] { lines};
+    setmethod.invoke(input,setargs);
+    getStorage().writeInput(input);
+    }
     String[] readFile(String filename) {
         return getStorage().readFile(filename);
     }

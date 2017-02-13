@@ -41,6 +41,8 @@ class FormaOrganizationData implements ChangeHandler{
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -64,10 +66,9 @@ class FormaOrganizationData implements ChangeHandler{
             business.setText(linefields[1]);
             }
     }
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
         String[] lines={name.getText(),business.getText()};
-        ctrl.getOrganization().setFields(lines);
-        ctrl.wrtiteInput(ctrl.getOrganization());
+        ctrl.wrtiteInput(ctrl.getOrganization(), lines);
         ctrl.onChange();
     }
     public void onChange() {
