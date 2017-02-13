@@ -5,14 +5,15 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 public class Storage {
     private File file;
-    void writeInput(Object input, String filename) throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
-     try {
+    void writeInput(Object input) throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
+        Class writeclass = input.getClass();
+        String filename=writeclass.getName()+".dat";
+        try {
             filexists(filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
         FileWriter writer = new FileWriter(filename);
-        Class writeclass = input.getClass();
         Method[] inputmethods= writeclass.getDeclaredMethods();
         for (Method method : inputmethods) {
             if(method.getName().startsWith("get")){

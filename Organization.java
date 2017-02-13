@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 class Organization {
     private String name;
     private String business;
@@ -12,7 +10,7 @@ class Organization {
     String getBusiness() {
         return business;
     }
-    void setOrganization (String[] linefields) throws ParseException, IllegalAccessException {
+    void setFields (String[] linefields) throws ParseException, IllegalAccessException {
         Class c=this.getClass();
         Field[] setFields = this.getClass().getDeclaredFields();
         int i=0;
@@ -23,7 +21,7 @@ class Organization {
             }
         }
     }
-    boolean compareOrg(Organization another_org) throws IOException {
+    boolean compareData(Organization another_org) throws IOException {
         if (!myEquals(this.getName(), another_org.getName())) {
             return false;
         }

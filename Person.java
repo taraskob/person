@@ -16,7 +16,7 @@ import java.util.Date;
     Date getBirthday() {
         return birthday;
     }
-    void setPerson(String[] linefields) throws ParseException, IllegalAccessException {
+    void setFields(String[] linefields) throws ParseException, IllegalAccessException {
         Field[] setFields = this.getClass().getDeclaredFields();
         int i=0;
         if (linefields.length >= setFields.length){
@@ -29,18 +29,19 @@ import java.util.Date;
               }
               }
  }
-    boolean comparePerson(Person another_person) throws IOException {
-        if (!myEquals(this.getName(), another_person.getName())) {
-            return false;
-        }
-        if (!myEquals(this.getSurname(), another_person.getSurname())) {
-            return false;
-        }
-        if (!(this.getBirthday().equals(another_person.getBirthday()))) {
-            return false;
-        }
-        return true;
-    }
+   boolean compareData(Person another_person) throws IOException {
+         if (!myEquals(this.getName(), another_person.getName())) {
+             return false;
+         }
+         if (!myEquals(this.getSurname(), another_person.getSurname())) {
+             return false;
+         }
+         if (!(this.getBirthday().equals(another_person.getBirthday()))) {
+             return false;
+         }
+         return true;
+     }
+
     private boolean myEquals(String str1, String str2) {
         return str1 == null ? str2 == null : str1.equals(str2);
     }

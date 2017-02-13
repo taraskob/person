@@ -65,7 +65,7 @@ class FormaPersonalData implements ChangeHandler {
             jfrm.setVisible(true);
         }
     private void load() {
-        String[] linefields = ctrl.readFile(ctrl.getPersom().getClass().getName()+".dat");
+        String[] linefields = ctrl.readFile(ctrl.getPerson().getClass().getName()+".dat");
         if(linefields.length<3) {
             name.setText("Name");
             surname.setText("Surname");
@@ -77,8 +77,8 @@ class FormaPersonalData implements ChangeHandler {
         }
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
         String[] lines={name.getText(),surname.getText(),birthday.getText()};
-        ctrl.getPersom().setPerson(lines);
-        ctrl.wrtiteInput(ctrl.getPersom().getClass().getName()+".dat",ctrl.getPersom());
+        ctrl.getPerson().setFields(lines);
+        ctrl.wrtiteInput(ctrl.getPerson());
         ctrl.onChange();
         }
     public void onChange() {
