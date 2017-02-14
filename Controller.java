@@ -22,14 +22,24 @@ class Controller {
         catch (InterruptedException e) {
             e.printStackTrace();}
     }
-     <T> void syncrogen(T synclass) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, ParseException {
+     <T> void syncrogen(T synclass) throws IllegalAccessException, InstantiationException, NoSuchMethodException,
+             InvocationTargetException, ParseException, NoSuchFieldException, IOException {
         String nameoffile=synclass.getClass().getName()+".dat";
         Class cl = synclass.getClass();
-        Class[] paramTypes = new Class[] {java.lang.String[].class};
-        Method setmethod = cl.getDeclaredMethod("setFields",paramTypes);
-        Object[] setargs = new Object[] { readFile(nameoffile) };
         T another= (T) cl.newInstance();
-        setmethod.invoke(another,setargs);
+         try {
+             getStorage().setFields(another,readFile(nameoffile));
+         } catch (IllegalAccessException e) {
+             e.printStackTrace();
+         } catch (ParseException e) {
+             e.printStackTrace();
+         } catch (NoSuchFieldException e) {
+             e.printStackTrace();
+         } catch (IOException e) {
+             e.printStackTrace();
+         } catch (InvocationTargetException e) {
+             e.printStackTrace();
+         }
         Class[] paramTypes1 = new Class[] {synclass.getClass()};
         Method comparemethod = cl.getDeclaredMethod("compareData",paramTypes1);
         Object[] compareargs = new Object[] { another };
@@ -53,23 +63,20 @@ class Controller {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
     }
     Person getPerson() {return person;}
     Organization getOrganization() {return organization;}
     Storage getStorage() {return storage;}
-    void wrtiteInput(Object input, String[] lines) throws InvocationTargetException, NoSuchFieldException,
-            IllegalAccessException,IOException, NoSuchMethodException
-    {
-    Class cl = input.getClass();
-    Class[] paramTypes = new Class[] {java.lang.String[].class};
-    Method setmethod = cl.getDeclaredMethod("setFields",paramTypes);
-    Object[] setargs = new Object[] { lines};
-    setmethod.invoke(input,setargs);
-    getStorage().writeInput(input);
+    void saveInput(Object input, String[] linefields) throws InvocationTargetException, NoSuchFieldException,
+            IllegalAccessException, ParseException, IOException
+    {getStorage().setFields(input,linefields);
+        getStorage().writeInput(input);
     }
-    String[] readFile(String filename) {
-        return getStorage().readFile(filename);
+    String[] readFile(Object input) {
+        return getStorage().readFile(input);
     }
     void onChange() throws ParseException, IllegalAccessException {
         for(ChangeHandler item:listener){

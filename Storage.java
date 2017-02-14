@@ -1,11 +1,29 @@
 import java.io.*;
 import java.lang.Object;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 public class Storage {
     private File file;
-    void writeInput(Object input) throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
+    void setFields(Object input,String[] linefields) throws IllegalAccessException, ParseException,
+            NoSuchFieldException, IOException, InvocationTargetException {
+        Field[] setFields = input.getClass().getDeclaredFields();
+        int i = 0;
+        if (linefields.length >= setFields.length) {
+            for (Field field : setFields) {
+                field.setAccessible(true);
+                if (!field.getType().getName().endsWith("Date"))
+                {field.set(input, linefields[i]);i++;}
+                else
+                {field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
+                i++;}
+            }
+        }
+    }
+    void writeInput(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
+        InvocationTargetException, ParseException {
         Class writeclass = input.getClass();
         String filename=writeclass.getName()+".dat";
         try {
@@ -16,7 +34,9 @@ public class Storage {
         FileWriter writer = new FileWriter(filename);
         Method[] inputmethods= writeclass.getDeclaredMethods();
         for (Method method : inputmethods) {
+
             if(method.getName().startsWith("get")){
+
             if(method.getReturnType().getName().endsWith("String")){
                 writer.write((String) method.invoke(input)+"\r\n");
              }
@@ -38,7 +58,8 @@ public class Storage {
             writer.close();
         }
     }
-    String[] readFile(String filename) {
+    String[] readFile(Object input) {
+        String filename=input.getClass().getName()+".dat";
         StringBuilder line = new StringBuilder();
         try {
             filexists(filename);

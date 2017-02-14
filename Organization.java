@@ -1,25 +1,12 @@
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.text.ParseException;
 class Organization {
     private String name;
-    private String business;
     String getName() {
         return name;
     }
+    private String business;
     String getBusiness() {
         return business;
-    }
-    void setFields (String[] linefields) throws ParseException, IllegalAccessException {
-        Class c=this.getClass();
-        Field[] setFields = this.getClass().getDeclaredFields();
-        int i=0;
-        if (linefields.length >= setFields.length){
-            for (Field field : setFields){
-                     field.set(this, linefields[i]);
-                 i++;
-            }
-        }
     }
     boolean compareData(Organization another_org) throws IOException {
         if (!myEquals(this.getName(), another_org.getName())) {

@@ -22,6 +22,5 @@ class LTimerTask extends TimerTask {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
-        }
-    }
+        }   }
 }

@@ -56,7 +56,7 @@ class FormaOrganizationData implements ChangeHandler{
         jfrm.setVisible(true);
     }
     private void load() {
-        String[] linefields = ctrl.readFile(ctrl.getOrganization().getClass().getName()+".dat");
+        String[] linefields = ctrl.readFile(ctrl.getOrganization());
         if(linefields.length<2) {
             name.setText("Name");
             business.setText("Business");
@@ -66,12 +66,13 @@ class FormaOrganizationData implements ChangeHandler{
             business.setText(linefields[1]);
             }
     }
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
+            NoSuchFieldException, NoSuchMethodException {
         String[] lines={name.getText(),business.getText()};
-        ctrl.wrtiteInput(ctrl.getOrganization(), lines);
+        ctrl.saveInput(ctrl.getOrganization(), lines);
         ctrl.onChange();
-    }
-    public void onChange() {
+          }
+      public void onChange() {
         load();
     }
 }
