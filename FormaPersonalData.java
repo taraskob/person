@@ -73,7 +73,7 @@ class FormaPersonalData implements ChangeHandler {
             jfrm.setVisible(true);
         }
     private void load() throws ParseException, IllegalAccessException {
-        ctrl.readFile(ctrl.getPerson());
+        ctrl.load(ctrl.getPerson());
             name.setText(ctrl.getPerson().getName());
             surname.setText(ctrl.getPerson().getSurname());
             birthday.setValue(ctrl.getPerson().getBirthday());}

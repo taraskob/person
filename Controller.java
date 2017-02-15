@@ -28,7 +28,7 @@ class Controller {
         Class cl = synclass.getClass();
         T another= (T) cl.newInstance();
          try {
-             getStorage().readFile(another);
+             getStorage().readData(another);
          } catch (IllegalAccessException e) {
              e.printStackTrace();
          } catch (ParseException e) {
@@ -67,8 +67,8 @@ class Controller {
     void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException
     {       getStorage().writeInput(input);    }
-    void readFile(Object input) throws ParseException, IllegalAccessException {
-         getStorage().readFile(input);
+    void load(Object input) throws ParseException, IllegalAccessException {
+         getStorage().readData(input);
     }
     void onChange() throws ParseException, IllegalAccessException {
         for(ChangeHandler item:listener){

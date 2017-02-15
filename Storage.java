@@ -39,7 +39,7 @@ public class Storage {
             writer.close();
         }
     }
-    void readFile(Object input) throws IllegalAccessException, ParseException {
+    void readData(Object input) throws IllegalAccessException, ParseException {
         String filename=input.getClass().getName()+".dat";
         StringBuilder line = new StringBuilder();
         try {

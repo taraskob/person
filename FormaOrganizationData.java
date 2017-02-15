@@ -63,7 +63,7 @@ class FormaOrganizationData implements ChangeHandler{
     }
     private void load() throws ParseException, IllegalAccessException {
         try {
-            ctrl.readFile(ctrl.getOrganization());
+            ctrl.load(ctrl.getOrganization());
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
