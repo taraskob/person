@@ -1,3 +1,5 @@
+import java.text.ParseException;
+
 interface ChangeHandler {
-    void onChange();
+    void onChange() throws ParseException, IllegalAccessException;
 }

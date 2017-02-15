@@ -11,7 +11,7 @@ class FormaOrganizationData implements ChangeHandler{
     private JTextField business;
     private JButton jbtnSave;
     private Controller ctrl=new Controller();
-    FormaOrganizationData() throws ParseException {
+    FormaOrganizationData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Organization");
         jfrm.getContentPane().setLayout(new FlowLayout());
         jfrm.setSize(240, 170);
@@ -26,7 +26,13 @@ class FormaOrganizationData implements ChangeHandler{
         business.setColumns(15);
         jbtnSave = new JButton("Save Organization Data");
         ctrl.addToListener(this);
-        load();
+        try {
+            load();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         jbtnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent le) {
                 try {
@@ -55,24 +61,26 @@ class FormaOrganizationData implements ChangeHandler{
         jfrm.getContentPane().add(jlab);
         jfrm.setVisible(true);
     }
-    private void load() {
-        String[] linefields = ctrl.readFile(ctrl.getOrganization());
-        if(linefields.length<2) {
-            name.setText("Name");
-            business.setText("Business");
-            }
-        else {
-            name.setText(linefields[0]);
-            business.setText(linefields[1]);
-            }
+    private void load() throws ParseException, IllegalAccessException {
+        try {
+            ctrl.readFile(ctrl.getOrganization());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        name.setText(ctrl.getOrganization().getName());
+        business.setText(ctrl.getOrganization().getBusiness());
+
     }
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
-        String[] lines={name.getText(),business.getText()};
-        ctrl.saveInput(ctrl.getOrganization(), lines);
+        ctrl.getOrganization().setName(name.getText());
+        ctrl.getOrganization().setBusiness(business.getText());
+        ctrl.saveInput(ctrl.getOrganization());
         ctrl.onChange();
           }
-      public void onChange() {
+      public void onChange() throws ParseException, IllegalAccessException {
         load();
     }
 }

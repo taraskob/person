@@ -14,7 +14,7 @@ class FormaPersonalData implements ChangeHandler {
     private JFormattedTextField birthday;
     private JButton jbtnSave;
     private Controller ctrl=new Controller();
-        FormaPersonalData() throws ParseException {
+        FormaPersonalData() throws ParseException, IllegalAccessException {
             JFrame jfrm = new JFrame("Person");
             jfrm.getContentPane().setLayout(new FlowLayout());
             jfrm.setSize(240, 270);
@@ -35,7 +35,13 @@ class FormaPersonalData implements ChangeHandler {
             birthday.setValue(new Date());
             jbtnSave = new JButton("Save Personal Data");
             ctrl.addToListener(this);
-            load();
+            try {
+                load();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
             jbtnSave.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent le) {
                     try {
@@ -66,24 +72,20 @@ class FormaPersonalData implements ChangeHandler {
             jfrm.getContentPane().add(jlab);
             jfrm.setVisible(true);
         }
-    private void load() {
-        String[] linefields = ctrl.readFile(ctrl.getPerson());
-        if(linefields.length<3) {
-            name.setText("Name");
-            surname.setText("Surname");
-            birthday.setValue(new Date());}
-        else {
-            name.setText(linefields[0]);
-            surname.setText(linefields[1]);
-            birthday.setText(linefields[2]);}
-        }
+    private void load() throws ParseException, IllegalAccessException {
+        ctrl.readFile(ctrl.getPerson());
+            name.setText(ctrl.getPerson().getName());
+            surname.setText(ctrl.getPerson().getSurname());
+            birthday.setValue(ctrl.getPerson().getBirthday());}
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
-        String[] lines={name.getText(),surname.getText(),birthday.getText()};
-        ctrl.saveInput(ctrl.getPerson(), lines);
+        ctrl.getPerson().setName(name.getText());
+        ctrl.getPerson().setSurname(surname.getText());
+        ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+        ctrl.saveInput(ctrl.getPerson());
         ctrl.onChange();
         }
-    public void onChange() {
+    public void onChange() throws ParseException, IllegalAccessException {
         load();
     }
     }

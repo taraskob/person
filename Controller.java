@@ -28,19 +28,13 @@ class Controller {
         Class cl = synclass.getClass();
         T another= (T) cl.newInstance();
          try {
-             getStorage().setFields(another,readFile(nameoffile));
+             getStorage().readFile(another);
          } catch (IllegalAccessException e) {
              e.printStackTrace();
          } catch (ParseException e) {
              e.printStackTrace();
-         } catch (NoSuchFieldException e) {
-             e.printStackTrace();
-         } catch (IOException e) {
-             e.printStackTrace();
-         } catch (InvocationTargetException e) {
-             e.printStackTrace();
          }
-        Class[] paramTypes1 = new Class[] {synclass.getClass()};
+         Class[] paramTypes1 = new Class[] {synclass.getClass()};
         Method comparemethod = cl.getDeclaredMethod("compareData",paramTypes1);
         Object[] compareargs = new Object[] { another };
         if(!((Boolean) (comparemethod.invoke(synclass,compareargs))))
@@ -70,13 +64,11 @@ class Controller {
     Person getPerson() {return person;}
     Organization getOrganization() {return organization;}
     Storage getStorage() {return storage;}
-    void saveInput(Object input, String[] linefields) throws InvocationTargetException, NoSuchFieldException,
+    void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException
-    {getStorage().setFields(input,linefields);
-        getStorage().writeInput(input);
-    }
-    String[] readFile(Object input) {
-        return getStorage().readFile(input);
+    {       getStorage().writeInput(input);    }
+    void readFile(Object input) throws ParseException, IllegalAccessException {
+         getStorage().readFile(input);
     }
     void onChange() throws ParseException, IllegalAccessException {
         for(ChangeHandler item:listener){

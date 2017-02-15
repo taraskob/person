@@ -5,9 +5,15 @@ public class MainPersona {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new FormaPersonalData();
+                    try {
+                        new FormaPersonalData();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                     new FormaOrganizationData();
                 } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }

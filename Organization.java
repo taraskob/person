@@ -1,10 +1,10 @@
 import java.io.IOException;
 class Organization {
     private String name;
-    String getName() {
-        return name;
-    }
     private String business;
+    void setName(String name) {this.name=name;}
+    String getName() {return name;}
+    void setBusiness(String business) {this.business=business;}
     String getBusiness() {
         return business;
     }

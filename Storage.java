@@ -2,26 +2,10 @@ import java.io.*;
 import java.lang.Object;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 public class Storage {
     private File file;
-    void setFields(Object input,String[] linefields) throws IllegalAccessException, ParseException,
-            NoSuchFieldException, IOException, InvocationTargetException {
-        Field[] setFields = input.getClass().getDeclaredFields();
-        int i = 0;
-        if (linefields.length >= setFields.length) {
-            for (Field field : setFields) {
-                field.setAccessible(true);
-                if (!field.getType().getName().endsWith("Date"))
-                {field.set(input, linefields[i]);i++;}
-                else
-                {field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
-                i++;}
-            }
-        }
-    }
     void writeInput(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
         InvocationTargetException, ParseException {
         Class writeclass = input.getClass();
@@ -32,21 +16,18 @@ public class Storage {
             e.printStackTrace();
         }
         FileWriter writer = new FileWriter(filename);
-        Method[] inputmethods= writeclass.getDeclaredMethods();
-        for (Method method : inputmethods) {
-
-            if(method.getName().startsWith("get")){
-
-            if(method.getReturnType().getName().endsWith("String")){
-                writer.write((String) method.invoke(input)+"\r\n");
-             }
-            if(method.getReturnType().getName().endsWith("Date")){
-                writer.write(new SimpleDateFormat("dd.MM.yyyy").format(method.invoke(input))+"\r\n");
-             }
-             }
-         }
-        writer.close();
+        Field[] getFields = input.getClass().getDeclaredFields();
+        for(Field field:getFields) {
+            field.setAccessible(true);
+            if (!field.getType().getName().endsWith("Date"))
+            { String fieldValue = (String) field.get(input);
+                writer.write(fieldValue+"\r\n");}
+            else
+            {String fieldValue = new SimpleDateFormat("dd.MM.yyyy").format(field.get(input));
+                writer.write(fieldValue+"\r\n");
         }
+        }
+        writer.close();}
     void filexists(String fileName) throws IOException {
         file = new File(fileName);
         if (!file.exists()){
@@ -58,7 +39,7 @@ public class Storage {
             writer.close();
         }
     }
-    String[] readFile(Object input) {
+    void readFile(Object input) throws IllegalAccessException, ParseException {
         String filename=input.getClass().getName()+".dat";
         StringBuilder line = new StringBuilder();
         try {
@@ -80,6 +61,18 @@ public class Storage {
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
-        return line.toString().split("\n");
+        String[] linefields=line.toString().split("\n");
+        Field[] setFields = input.getClass().getDeclaredFields();
+        int i = 0;
+        if (linefields.length >= setFields.length) {
+            for (Field field : setFields) {
+                field.setAccessible(true);
+                if (!field.getType().getName().endsWith("Date"))
+                {field.set(input, linefields[i]);i++;}
+                else
+                {field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
+                    i++;}
+            }
+        }
     }
 }
