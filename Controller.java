@@ -22,31 +22,31 @@ class Controller {
         catch (InterruptedException e) {
             e.printStackTrace();}
     }
-     <T> void syncrogen(T synclass) throws IllegalAccessException, InstantiationException, NoSuchMethodException,
+      void syncro(Object synclass) throws IllegalAccessException, InstantiationException, NoSuchMethodException,
              InvocationTargetException, ParseException, NoSuchFieldException, IOException {
-        String nameoffile=synclass.getClass().getName()+".dat";
-        Class cl = synclass.getClass();
-        T another= (T) cl.newInstance();
-         try {
-             getStorage().readData(another);
-         } catch (IllegalAccessException e) {
-             e.printStackTrace();
-         } catch (ParseException e) {
-             e.printStackTrace();
-         }
-         Class[] paramTypes1 = new Class[] {synclass.getClass()};
-        Method comparemethod = cl.getDeclaredMethod("compareData",paramTypes1);
-        Object[] compareargs = new Object[] { another };
-        if(!((Boolean) (comparemethod.invoke(synclass,compareargs))))
-            {
-            synclass=another;
-            onChange();
-        }
-    }
+          Class cl = synclass.getClass();
+          Object another = cl.newInstance();
+          try {
+              getStorage().readData(another);
+          } catch (IllegalAccessException e) {
+              e.printStackTrace();
+          } catch (ParseException e) {
+              e.printStackTrace();
+          }
+          Class[] paramTypes = new Class[]{Object.class};
+          Method comparemethod = cl.getDeclaredMethod("compareTo", paramTypes);
+          Object[] compareargs = new Object[]{another};
+          int result = 0;
+          result = (int) comparemethod.invoke(synclass, compareargs);
+           if (result != 0) {
+              synclass = another;
+              onChange();
+          }
+      }
     void syncro() throws IOException, ParseException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         try {
-            syncrogen(getPerson());
-            syncrogen(getOrganization());
+            syncro(getPerson());
+            syncro(getOrganization());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -66,7 +66,7 @@ class Controller {
     Storage getStorage() {return storage;}
     void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException
-    {       getStorage().writeInput(input);    }
+    {       getStorage().writeData(input);    }
     void load(Object input) throws ParseException, IllegalAccessException {
          getStorage().readData(input);
     }
@@ -75,4 +75,4 @@ class Controller {
             item.onChange();
         }
     }
-}
+    }

@@ -1,23 +1,34 @@
 import java.io.IOException;
-class Organization {
+import java.lang.reflect.Field;
+class Organization implements Comparable {
     private String name;
     private String business;
-    void setName(String name) {this.name=name;}
-    String getName() {return name;}
-    void setBusiness(String business) {this.business=business;}
+    Organization(){
+    name="NAME";
+    business="BUSINESS";}
+    void setName(String name) {
+        this.name = name;
+    }
+    String getName() {
+        return name;
+    }
+    void setBusiness(String business) {
+        this.business = business;
+    }
     String getBusiness() {
         return business;
     }
-    boolean compareData(Organization another_org) throws IOException {
-        if (!myEquals(this.getName(), another_org.getName())) {
-            return false;
+   @Override
+    public int compareTo(Object o) {
+        Organization another = (Organization) o;
+        Field[] compareFields = o.getClass().getDeclaredFields();
+        int result;
+        for (Field field : compareFields) {
+            result = getName().compareTo(another.getName());
+            if (result != 0) {
+                return result;
+            }
         }
-        if (!myEquals(this.getBusiness(), another_org.getBusiness())) {
-            return false;
-        }
-        return true;
-    }
-    private boolean myEquals(String str1, String str2) {
-        return str1 == null ? str2 == null : str1.equals(str2);
+        return 0;
     }
 }

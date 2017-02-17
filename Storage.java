@@ -6,12 +6,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 public class Storage {
     private File file;
-    void writeInput(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
+    public void writeData(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
         InvocationTargetException, ParseException {
-        Class writeclass = input.getClass();
-        String filename=writeclass.getName()+".dat";
+        String filename=getFilename(input.getClass());
         try {
-            filexists(filename);
+            sourcexists(filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -19,16 +18,16 @@ public class Storage {
         Field[] getFields = input.getClass().getDeclaredFields();
         for(Field field:getFields) {
             field.setAccessible(true);
-            if (!field.getType().getName().endsWith("Date"))
-            { String fieldValue = (String) field.get(input);
-                writer.write(fieldValue+"\r\n");}
-            else
+            if (field.getType().getName().endsWith("Date"))
             {String fieldValue = new SimpleDateFormat("dd.MM.yyyy").format(field.get(input));
                 writer.write(fieldValue+"\r\n");
-        }
+            }
+            else
+            { String fieldValue = (String) field.get(input);
+                writer.write(fieldValue+"\r\n");}
         }
         writer.close();}
-    void filexists(String fileName) throws IOException {
+    public void sourcexists(String fileName) throws IOException {
         file = new File(fileName);
         if (!file.exists()){
             String line="";
@@ -39,11 +38,11 @@ public class Storage {
             writer.close();
         }
     }
-    void readData(Object input) throws IllegalAccessException, ParseException {
-        String filename=input.getClass().getName()+".dat";
+    public void readData(Object input) throws IllegalAccessException, ParseException {
+        String filename=getFilename(input.getClass());
         StringBuilder line = new StringBuilder();
         try {
-            filexists(filename);
+            sourcexists(filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,4 +74,5 @@ public class Storage {
             }
         }
     }
+    String getFilename(Class classname) {return classname.getName()+".dat";}
 }
