@@ -66,11 +66,11 @@ public class Storage {
         if (linefields.length >= setFields.length) {
             for (Field field : setFields) {
                 field.setAccessible(true);
-                if (!field.getType().getName().endsWith("Date"))
-                {field.set(input, linefields[i]);i++;}
+                if (field.getType().getName().endsWith("Date"))
+                field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
                 else
-                {field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
-                    i++;}
+                field.set(input, linefields[i]);
+                i++;
             }
         }
     }

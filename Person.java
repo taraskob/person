@@ -22,13 +22,17 @@ import java.util.Date;
     @Override
      public int compareTo(Object o) {
          Person another=(Person) o;
-        Field[] compareFields = o.getClass().getDeclaredFields();
-         int result;
-        for (Field field : compareFields) {
-            result = getName().compareTo(another.getName());
-            if (result != 0) {
+        int result=this.name.compareTo(another.name);
+           if (result != 0) {
                 return result;
             }
+        result=this.surname.compareTo(another.surname);
+        if (result != 0) {
+            return result;
+        }
+        result=this.birthday.compareTo(another.birthday);
+        if (result != 0) {
+            return result;
         }
          return 0;
      }

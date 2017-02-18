@@ -7,13 +7,11 @@ public class MainPersona {
                 try {
                     try {
                         new FormaPersonalData();
+                        new FormaOrganizationData();
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
-                    new FormaOrganizationData();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                   } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }

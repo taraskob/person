@@ -21,14 +21,14 @@ class Organization implements Comparable {
    @Override
     public int compareTo(Object o) {
         Organization another = (Organization) o;
-        Field[] compareFields = o.getClass().getDeclaredFields();
-        int result;
-        for (Field field : compareFields) {
-            result = getName().compareTo(another.getName());
-            if (result != 0) {
-                return result;
-            }
-        }
+       int result=this.name.compareTo(another.name);
+       if (result != 0) {
+           return result;
+       }
+       result=this.business.compareTo(another.business);
+       if (result != 0) {
+           return result;
+       }
         return 0;
     }
 }
