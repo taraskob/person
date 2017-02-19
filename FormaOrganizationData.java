@@ -10,7 +10,7 @@ class FormaOrganizationData implements ChangeHandler{
     private JTextField name;
     private JTextField business;
     private JButton jbtnSave;
-    private Controller ctrl=new Controller();
+    private Basecontroller ctrl=new Controller();
     FormaOrganizationData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Organization");
         jfrm.getContentPane().setLayout(new FlowLayout());

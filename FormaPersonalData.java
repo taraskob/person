@@ -13,7 +13,7 @@ class FormaPersonalData implements ChangeHandler {
     private JTextField surname;
     private JFormattedTextField birthday;
     private JButton jbtnSave;
-    private Controller ctrl=new Controller();
+    private Basecontroller ctrl=new Controller();
         FormaPersonalData() throws ParseException, IllegalAccessException {
             JFrame jfrm = new JFrame("Person");
             jfrm.getContentPane().setLayout(new FlowLayout());
