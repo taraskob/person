@@ -9,7 +9,8 @@ class LTimerTask extends TimerTask {
     }
     public void run() {
         try {
-            ctrl.syncro();
+            { ctrl.syncro(ctrl.getPerson());
+                ctrl.syncro(ctrl.getOrganization());}
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
