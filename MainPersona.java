@@ -6,8 +6,8 @@ public class MainPersona {
             public void run() {
                 try {
                     try {
-                        new FormaPersonalData();
-                        new FormaOrganizationData();
+                        { new FormaPersonalData();
+                        new FormaOrganizationData();}
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }

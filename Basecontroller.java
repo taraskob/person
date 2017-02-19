@@ -14,8 +14,8 @@ public class Basecontroller {
     void syncro() throws IllegalAccessException, InvocationTargetException, ParseException, InstantiationException,
             IOException, NoSuchMethodException, NoSuchFieldException {
             try {
-                syncro(getPerson());
-                syncro(getOrganization());
+                { syncro(getPerson());
+                syncro(getOrganization());}
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
