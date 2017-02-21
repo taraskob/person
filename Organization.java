@@ -1,6 +1,4 @@
-import java.io.IOException;
-import java.lang.reflect.Field;
-class Organization implements Comparable {
+class Organization extends Storable {
     private String name;
     private String business;
     Organization(){

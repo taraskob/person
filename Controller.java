@@ -4,10 +4,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-class Controller  {
+class Controller {
     private List<ChangeHandler> listener = new ArrayList<>();
     private Organization organization=new Organization();
     private Person person=new Person();
+    ArrayList<Storable> objectlist = new ArrayList<>();
+    {objectlist.add(person);
+        objectlist.add(organization);}
     private Storage storage=new Storage();
     void addToListener(ChangeHandler changeHandler){
         listener.add(changeHandler);
@@ -21,47 +24,25 @@ class Controller  {
         catch (InterruptedException e) {
             e.printStackTrace();}
     }
-    void syncro() throws IllegalAccessException, ParseException, InstantiationException, NoSuchFieldException,
-            NoSuchMethodException, InvocationTargetException, IOException {
-        try {
-            {syncro(getPerson());
-            syncro(getOrganization());}
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+     void syncronizeobjects() throws IllegalAccessException, ParseException, InstantiationException {
+         for (Storable st : objectlist) {
+             int result = 0;
+             result = st.compareTo(getAnother(st));
+             if (result != 0) {
+                 onChange();
+             }
+         }
     }
-    <T> void syncro(T synclass) throws IllegalAccessException, InstantiationException, NoSuchMethodException,
-            InvocationTargetException, ParseException, NoSuchFieldException, IOException {
+    <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, ParseException {
         T another= (T) synclass.getClass().newInstance();
         try {
-            getStorage().readData(another);
+             getStorage().readData(another);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int result = 0;
-        if (synclass instanceof Person) {
-            result = getPerson().compareTo(another);
-        } else if (synclass instanceof Organization) {
-            result = getOrganization().compareTo(another);
-        }
-        if (result != 0) {
-            synclass = another;
-            onChange();
-        }
+        return another;
     }
         Person getPerson() {return person;}
         Organization getOrganization() {return organization;}

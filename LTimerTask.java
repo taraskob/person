@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.TimerTask;
 class LTimerTask extends TimerTask {
@@ -9,22 +7,13 @@ class LTimerTask extends TimerTask {
     }
     public void run() {
         try {
-            { ctrl.syncro(ctrl.getPerson());
-                ctrl.syncro(ctrl.getOrganization());}
-        } catch (IOException e) {
+            ctrl.syncronizeobjects();
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
     }
-}
+    }

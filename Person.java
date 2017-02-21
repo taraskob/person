@@ -1,7 +1,5 @@
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Date;
- class Person implements Comparable {
+ class Person extends Storable {
      private String name;
      private String surname;
      private Date birthday;
