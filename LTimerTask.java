@@ -6,7 +6,7 @@ class LTimerTask extends TimerTask {
         this.ctrl=fcntr;
     }
     public void run() {
-        try {
+     /*   try {
             ctrl.syncronizeobjects();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -14,6 +14,6 @@ class LTimerTask extends TimerTask {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     }

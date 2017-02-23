@@ -3,8 +3,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-class Controller {
+
+class Controller implements Runnable{
     private List<ChangeHandler> listener = new ArrayList<>();
     private Organization organization=new Organization();
     private Person person=new Person();
@@ -15,23 +15,57 @@ class Controller {
     void addToListener(ChangeHandler changeHandler){
         listener.add(changeHandler);
     }
-    private LTimerTask mytask=new LTimerTask(this);
-    private Timer compTimer=new Timer(true);
-    {compTimer.schedule(mytask,1000,15000);
-        try {
-            Thread.sleep(1000);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();}
-    }
-     void syncronizeobjects() throws IllegalAccessException, ParseException, InstantiationException {
-         for (Storable st : objectlist) {
-             int result = 0;
-             result = st.compareTo(getAnother(st));
-             if (result != 0) {
-                 onChange();
-             }
-         }
+    private Object input;
+    Boolean saveFlag=false;
+    Thread t;
+    {t=new Thread(this);
+    t.start();}
+    @Override
+    public void run() {
+       while(true) {
+           for (Storable st : objectlist) {
+               int result = 0;
+               try {
+                   result = st.compareTo(getAnother(st));
+               } catch (IllegalAccessException e) {
+                   e.printStackTrace();
+               } catch (InstantiationException e) {
+                   e.printStackTrace();
+               } catch (ParseException e) {
+                   e.printStackTrace();
+               }
+               if (result != 0) {
+                   try {
+                       onChange();
+                   } catch (ParseException e) {
+                       e.printStackTrace();
+                   } catch (IllegalAccessException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+           if(saveFlag) {
+               try {
+                   getStorage().writeData(input);
+                   setsaveFlag();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               } catch (IllegalAccessException e) {
+                   e.printStackTrace();
+               } catch (NoSuchFieldException e) {
+                   e.printStackTrace();
+               } catch (InvocationTargetException e) {
+                   e.printStackTrace();
+               } catch (ParseException e) {
+                   e.printStackTrace();
+               }
+           }
+           try {
+               Thread.sleep(15000);
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+       }
     }
     <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, ParseException {
         T another= (T) synclass.getClass().newInstance();
@@ -49,13 +83,18 @@ class Controller {
         Storage getStorage() {return storage;}
     void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException
-    {       getStorage().writeData(input);    }
-    void load(Object input) throws ParseException, IllegalAccessException {
-        getStorage().readData(input);
+        {this.input=input;
+          setsaveFlag(); }
+    void load(Object input) throws ParseException, IllegalAccessException {   getStorage().readData(input);  }
+    void setsaveFlag() {
+        if(saveFlag)
+            saveFlag=false;
+        else
+            saveFlag=true;
     }
     void onChange() throws ParseException, IllegalAccessException {
         for(ChangeHandler item:listener){
             item.onChange();
         }
     }
-    }
+}

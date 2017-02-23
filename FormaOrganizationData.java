@@ -78,8 +78,7 @@ class FormaOrganizationData implements ChangeHandler{
         ctrl.getOrganization().setName(name.getText());
         ctrl.getOrganization().setBusiness(business.getText());
         ctrl.saveInput(ctrl.getOrganization());
-        ctrl.onChange();
-          }
+        }
       public void onChange() throws ParseException, IllegalAccessException {
         load();
     }

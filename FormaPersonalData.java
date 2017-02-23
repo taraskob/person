@@ -73,18 +73,17 @@ class FormaPersonalData implements ChangeHandler {
             jfrm.setVisible(true);
         }
     private void load() throws ParseException, IllegalAccessException {
-        ctrl.load(ctrl.getPerson());
+            ctrl.load(ctrl.getPerson());
             name.setText(ctrl.getPerson().getName());
             surname.setText(ctrl.getPerson().getSurname());
             birthday.setValue(ctrl.getPerson().getBirthday());}
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
-        ctrl.getPerson().setName(name.getText());
-        ctrl.getPerson().setSurname(surname.getText());
-        ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
-        ctrl.saveInput(ctrl.getPerson());
-        ctrl.onChange();
-        }
+            ctrl.getPerson().setName(name.getText());
+            ctrl.getPerson().setSurname(surname.getText());
+            ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+            ctrl.saveInput(ctrl.getPerson());
+     }
     public void onChange() throws ParseException, IllegalAccessException {
         load();
     }
