@@ -23,27 +23,6 @@ class Controller implements Runnable{
     @Override
     public void run() {
        while(true) {
-           for (Storable st : objectlist) {
-               int result = 0;
-               try {
-                   result = st.compareTo(getAnother(st));
-               } catch (IllegalAccessException e) {
-                   e.printStackTrace();
-               } catch (InstantiationException e) {
-                   e.printStackTrace();
-               } catch (ParseException e) {
-                   e.printStackTrace();
-               }
-               if (result != 0) {
-                   try {
-                       onChange();
-                   } catch (ParseException e) {
-                       e.printStackTrace();
-                   } catch (IllegalAccessException e) {
-                       e.printStackTrace();
-                   }
-               }
-           }
            if(saveFlag) {
                try {
                    getStorage().writeData(input);
@@ -60,12 +39,36 @@ class Controller implements Runnable{
                    e.printStackTrace();
                }
            }
-           try {
-               Thread.sleep(15000);
+
+           try {synconizeobjects();
+               t.sleep(15000);
            } catch (InterruptedException e) {
                e.printStackTrace();
            }
        }
+    }
+    void synconizeobjects() {
+        for (Storable st : objectlist) {
+            int result = 0;
+            try {
+                result = st.compareTo(getAnother(st));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (result != 0) {
+                try {
+                    onChange();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
     <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, ParseException {
         T another= (T) synclass.getClass().newInstance();
