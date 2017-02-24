@@ -11,22 +11,23 @@ public class Storage {
         String filename=getFilename(input.getClass());
         try {
             sourcexists(filename);
+            FileWriter writer = new FileWriter(filename);
+            Field[] getFields = input.getClass().getDeclaredFields();
+            for(Field field:getFields) {
+                field.setAccessible(true);
+                if (field.getType().getName().endsWith("Date"))
+                {String fieldValue = new SimpleDateFormat("dd.MM.yyyy").format(field.get(input));
+                    writer.write(fieldValue+"\r\n");
+                }
+                else
+                { String fieldValue = (String) field.get(input);
+                    writer.write(fieldValue+"\r\n");}
+            }
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        FileWriter writer = new FileWriter(filename);
-        Field[] getFields = input.getClass().getDeclaredFields();
-        for(Field field:getFields) {
-            field.setAccessible(true);
-            if (field.getType().getName().endsWith("Date"))
-            {String fieldValue = new SimpleDateFormat("dd.MM.yyyy").format(field.get(input));
-                writer.write(fieldValue+"\r\n");
-            }
-            else
-            { String fieldValue = (String) field.get(input);
-                writer.write(fieldValue+"\r\n");}
         }
-        writer.close();}
     public void sourcexists(String fileName) throws IOException {
         file = new File(fileName);
         if (!file.exists()){
@@ -43,10 +44,6 @@ public class Storage {
         StringBuilder line = new StringBuilder();
         try {
             sourcexists(filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
             try {
                 String s;
@@ -56,22 +53,22 @@ public class Storage {
                 }
             } finally {
                 in.close();
+                String[] linefields=line.toString().split("\n");
+                Field[] setFields = input.getClass().getDeclaredFields();
+                int i = 0;
+                if (linefields.length >= setFields.length) {
+                    for (Field field : setFields) {
+                        field.setAccessible(true);
+                        if (field.getType().getName().endsWith("Date"))
+                            field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
+                        else
+                            field.set(input, linefields[i]);
+                        i++;
+                    }
+                }
             }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-        String[] linefields=line.toString().split("\n");
-        Field[] setFields = input.getClass().getDeclaredFields();
-        int i = 0;
-        if (linefields.length >= setFields.length) {
-            for (Field field : setFields) {
-                field.setAccessible(true);
-                if (field.getType().getName().endsWith("Date"))
-                field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
-                else
-                field.set(input, linefields[i]);
-                i++;
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     String getFilename(Class classname) {return classname.getName()+".dat";}

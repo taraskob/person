@@ -64,15 +64,16 @@ class FormaOrganizationData implements ChangeHandler{
     private void load() throws ParseException, IllegalAccessException {
         try {
             ctrl.load(ctrl.getOrganization());
+            name.setText(ctrl.getOrganization().getName());
+            business.setText(ctrl.getOrganization().getBusiness());
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        name.setText(ctrl.getOrganization().getName());
-        business.setText(ctrl.getOrganization().getBusiness());
-
-    }
+     }
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         ctrl.getOrganization().setName(name.getText());

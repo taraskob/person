@@ -47,6 +47,7 @@ class Controller implements Runnable{
            }
        }
     }
+
     void synconizeobjects() {
         for (Storable st : objectlist) {
             int result = 0;
@@ -65,6 +66,8 @@ class Controller implements Runnable{
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -88,14 +91,13 @@ class Controller implements Runnable{
             IllegalAccessException, ParseException, IOException
         {this.input=input;
           setsaveFlag(); }
-    void load(Object input) throws ParseException, IllegalAccessException {   getStorage().readData(input);  }
+    void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
+        getStorage().readData(input);  }
     void setsaveFlag() {
-        if(saveFlag)
-            saveFlag=false;
-        else
-            saveFlag=true;
+       saveFlag=saveFlag?false:true;
     }
-    void onChange() throws ParseException, IllegalAccessException {
+
+    void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         for(ChangeHandler item:listener){
             item.onChange();
         }

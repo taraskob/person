@@ -41,6 +41,8 @@ class FormaPersonalData implements ChangeHandler {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             jbtnSave.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent le) {
@@ -72,11 +74,20 @@ class FormaPersonalData implements ChangeHandler {
             jfrm.getContentPane().add(jlab);
             jfrm.setVisible(true);
         }
-    private void load() throws ParseException, IllegalAccessException {
+    private void load() throws ParseException, IllegalAccessException, InterruptedException {
+        try {
             ctrl.load(ctrl.getPerson());
             name.setText(ctrl.getPerson().getName());
             surname.setText(ctrl.getPerson().getSurname());
-            birthday.setValue(ctrl.getPerson().getBirthday());}
+            birthday.setValue(ctrl.getPerson().getBirthday());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        }
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
             ctrl.getPerson().setName(name.getText());
@@ -84,8 +95,16 @@ class FormaPersonalData implements ChangeHandler {
             ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
             ctrl.saveInput(ctrl.getPerson());
      }
-    public void onChange() throws ParseException, IllegalAccessException {
-        load();
+    public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+        try {
+            load();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     }
 
