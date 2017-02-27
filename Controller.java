@@ -19,15 +19,16 @@ class Controller implements Runnable{
     Boolean saveFlag=false;
     Thread t;
     {t=new Thread(this);
-    t.start();}
+        t.start();}
     @Override
     public void run() {
-       while(true) {
-           if(saveFlag) {
+
+        while(true) {
+            if(saveFlag) {
                try {
-                   getStorage().writeData(input);
+               getStorage().writeData(input);
                    setsaveFlag();
-               } catch (IOException e) {
+           } catch (IOException e) {
                    e.printStackTrace();
                } catch (IllegalAccessException e) {
                    e.printStackTrace();
@@ -40,19 +41,32 @@ class Controller implements Runnable{
                }
            }
 
-           try {synconizeobjects();
-               t.sleep(15000);
+           try {t.sleep(10000);
+               syncronizeobjects();
            } catch (InterruptedException e) {
                e.printStackTrace();
            }
-       }
-    }
 
-    void synconizeobjects() {
+       }
+       }
+
+
+   synchronized void  syncronizeobjects() throws InterruptedException {
         for (Storable st : objectlist) {
             int result = 0;
             try {
                 result = st.compareTo(getAnother(st));
+                if (result != 0) {
+                    try {
+                        onChange();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
@@ -60,40 +74,32 @@ class Controller implements Runnable{
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (result != 0) {
-                try {
-                    onChange();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
-    <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, ParseException {
+   synchronized <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException,
+           InterruptedException ,ParseException {
         T another= (T) synclass.getClass().newInstance();
         try {
-             getStorage().readData(another);
+             load(another);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return another;
+       return another;
     }
         Person getPerson() {return person;}
         Organization getOrganization() {return organization;}
-        Storage getStorage() {return storage;}
+    Storage getStorage() {return storage;}
     void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException
         {this.input=input;
           setsaveFlag(); }
-    void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
-        getStorage().readData(input);  }
-    void setsaveFlag() {
+   synchronized void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
+       getStorage().readData(input);}
+   synchronized void setsaveFlag() {
        saveFlag=saveFlag?false:true;
     }
 

@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
  class Person extends Storable {
      private String name;
@@ -18,7 +19,7 @@ import java.util.Date;
      void setBirthday(Date birthday) {this.birthday=birthday;}
      Date getBirthday() { return birthday; }
     @Override
-     public int compareTo(Object o) {
+     synchronized public int compareTo(Object o) {
          Person another=(Person) o;
         int result=this.name.compareTo(another.name);
            if (result != 0) {

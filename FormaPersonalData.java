@@ -95,7 +95,8 @@ class FormaPersonalData implements ChangeHandler {
             ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
             ctrl.saveInput(ctrl.getPerson());
      }
-    public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+    public void onChange() throws ParseException, IllegalAccessException,InterruptedException
+    {
         try {
             load();
         } catch (ParseException e) {

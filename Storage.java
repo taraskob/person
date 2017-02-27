@@ -4,9 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Storage {
     private File file;
-    public void writeData(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
+    synchronized void writeData(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
         InvocationTargetException, ParseException {
         String filename=getFilename(input.getClass());
         try {
@@ -28,7 +30,7 @@ public class Storage {
             e.printStackTrace();
         }
         }
-    public void sourcexists(String fileName) throws IOException {
+    synchronized void sourcexists(String fileName) throws IOException {
         file = new File(fileName);
         if (!file.exists()){
             String line="";
@@ -39,7 +41,7 @@ public class Storage {
             writer.close();
         }
     }
-    public void readData(Object input) throws IllegalAccessException, ParseException {
+    synchronized void readData(Object input) throws IllegalAccessException, ParseException {
         String filename=getFilename(input.getClass());
         StringBuilder line = new StringBuilder();
         try {
@@ -56,16 +58,23 @@ public class Storage {
                 String[] linefields=line.toString().split("\n");
                 Field[] setFields = input.getClass().getDeclaredFields();
                 int i = 0;
-                if (linefields.length >= setFields.length) {
+
                     for (Field field : setFields) {
                         field.setAccessible(true);
-                        if (field.getType().getName().endsWith("Date"))
-                            field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
-                        else
-                            field.set(input, linefields[i]);
-                        i++;
+                        if (linefields.length >= setFields.length) {
+                            if (field.getType().getName().endsWith("Date"))
+                                field.set(input, new SimpleDateFormat("dd.MM.yyyy").parse(linefields[i]));
+                            else
+                                field.set(input, linefields[i]);
+                            i++;
+                        }
+                        else {
+                            if (field.getType().getName().endsWith("Date"))
+                                field.set(input,new Date());
+                            else
+                                field.set(input, field.getName());
+                        }
                     }
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
