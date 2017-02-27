@@ -5,14 +5,13 @@ import java.text.ParseException;
 public class MainTest {
     public static void main(String[] args) throws InstantiationException, InterruptedException, IOException,
             NoSuchFieldException, ParseException, InvocationTargetException {
-       PersonaTest pt=new PersonaTest();
+        PersonaTest pt = new PersonaTest();
         try {
             pt.create_read();
             pt.write();
         } catch (InstantiationException e) {
             e.printStackTrace();
-        }
-        catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-class FormaOrganizationData implements ChangeHandler{
+
+class FormaOrganizationData implements ChangeHandler {
     private JLabel jlab;
     private JTextField name;
     private JTextField business;
     private JButton jbtnSave;
-    private Controller ctrl=new Controller();
+    private Controller ctrl = new Controller();
+
     FormaOrganizationData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Organization");
         jfrm.getContentPane().setLayout(new FlowLayout());
@@ -18,8 +20,8 @@ class FormaOrganizationData implements ChangeHandler{
         jfrm.setBounds(300, 10, 240, 220);
         jfrm.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         jlab = new JLabel();
-        JLabel jlabSeparator=new JLabel();
-        jlabSeparator.setPreferredSize(new Dimension(200,20));
+        JLabel jlabSeparator = new JLabel();
+        jlabSeparator.setPreferredSize(new Dimension(200, 20));
         name = new JTextField();
         business = new JTextField();
         name.setColumns(15);
@@ -63,6 +65,7 @@ class FormaOrganizationData implements ChangeHandler{
         jfrm.getContentPane().add(jlab);
         jfrm.setVisible(true);
     }
+
     private void load() throws ParseException, IllegalAccessException, InterruptedException {
         try {
             ctrl.load(ctrl.getOrganization());
@@ -75,23 +78,25 @@ class FormaOrganizationData implements ChangeHandler{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-     }
+    }
+
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         ctrl.getOrganization().setName(name.getText());
         ctrl.getOrganization().setBusiness(business.getText());
         ctrl.saveInput(ctrl.getOrganization());
+    }
+
+    public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+        try {
+            load();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-      public void onChange() throws ParseException, IllegalAccessException,InterruptedException {
-          try {
-              load();
-          } catch (ParseException e) {
-              e.printStackTrace();
-          } catch (IllegalAccessException e) {
-              e.printStackTrace();
-          } catch (InterruptedException e) {
-              e.printStackTrace();
-          }
-      }
+    }
 }
 

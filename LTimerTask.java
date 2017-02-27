@@ -1,10 +1,13 @@
 import java.text.ParseException;
 import java.util.TimerTask;
+
 class LTimerTask extends TimerTask {
     private Controller ctrl;
+
     LTimerTask(Controller fcntr) {
-        this.ctrl=fcntr;
+        this.ctrl = fcntr;
     }
+
     public void run() {
      /*   try {
             ctrl.syncronizeobjects();
@@ -16,4 +19,4 @@ class LTimerTask extends TimerTask {
             e.printStackTrace();
         }*/
     }
-    }
+}
