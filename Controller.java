@@ -51,8 +51,9 @@ class Controller implements Runnable {
             }
 
             try {
-                t.sleep(10000);
                 syncronizeobjects();
+                t.sleep(15000);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
