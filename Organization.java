@@ -7,6 +7,15 @@ class Organization extends Storable {
         business = "BUSINESS";
     }
 
+    Organization(String name, String business) {
+        this.name = name;
+        this.business = business;
+    }
+
+    Organization(Organization other) {
+        this(other.getName(),other.getBusiness());
+    }
+
     void setName(String name) {
         this.name = name;
     }

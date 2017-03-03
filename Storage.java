@@ -72,7 +72,8 @@ public class Storage {
                         i++;
                     } else {
                         if (field.getType().getName().endsWith("Date"))
-                            field.set(input, new Date());
+                            field.set(input, new SimpleDateFormat("dd.MM.yyyy").
+                                    parse((new SimpleDateFormat("dd.MM.yyyy").format(new Date()))));
                         else
                             field.set(input, field.getName());
                     }

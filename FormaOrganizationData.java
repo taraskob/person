@@ -11,7 +11,7 @@ class FormaOrganizationData implements ChangeHandler {
     private JTextField name;
     private JTextField business;
     private JButton jbtnSave;
-    private Controller ctrl = new Controller();
+    private Controller ctrl = Controller.getController();
 
     FormaOrganizationData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Organization");
@@ -67,26 +67,18 @@ class FormaOrganizationData implements ChangeHandler {
     }
 
     private void load() throws ParseException, IllegalAccessException, InterruptedException {
-        try {
-            ctrl.load(ctrl.getOrganization());
-            name.setText(ctrl.getOrganization().getName());
-            business.setText(ctrl.getOrganization().getBusiness());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        name.setText(ctrl.getOrganization().getName());
+        business.setText(ctrl.getOrganization().getBusiness());
     }
 
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         ctrl.getOrganization().setName(name.getText());
         ctrl.getOrganization().setBusiness(business.getText());
-        ctrl.saveInput(ctrl.getOrganization());
+        ctrl.saveInput(ctrl.getOrganizationClone(ctrl.getOrganization()));
     }
 
+    @Override
     public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         try {
             load();

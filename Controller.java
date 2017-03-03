@@ -4,10 +4,30 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-class Controller implements Runnable {
+public class Controller implements Runnable {
     private List<ChangeHandler> listener = new ArrayList<>();
-    private Organization organization = new Organization();
-    private Person person = new Person();
+
+    private Controller() {
+    }
+
+    private static class ControllerHandler {
+        private static Controller CTRL;
+
+        static {
+            try {
+                CTRL = new Controller();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Controller getController() {
+        return ControllerHandler.CTRL;
+    }
+
+    private Organization organization = getOrganization();
+    private Person person = getPerson();
     ArrayList<Storable> objectlist = new ArrayList<>();
 
     {
@@ -23,6 +43,7 @@ class Controller implements Runnable {
 
     private Object input;
     Boolean saveFlag = false;
+    Boolean loadFlag = true;
     Thread t;
 
     {
@@ -33,6 +54,20 @@ class Controller implements Runnable {
     @Override
     public void run() {
         while (true) {
+            if (loadFlag) {
+                for (Storable st : objectlist) {
+                    try {
+                        load(st);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                setloadFlag();
+            }
             if (saveFlag) {
                 try {
                     getStorage().writeData(input);
@@ -52,7 +87,7 @@ class Controller implements Runnable {
 
             try {
                 syncronizeobjects();
-                t.sleep(15000);
+                t.sleep(10000);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -60,21 +95,16 @@ class Controller implements Runnable {
         }
     }
 
-    synchronized void syncronizeobjects() throws InterruptedException {
+
+    void syncronizeobjects() throws InterruptedException {
         for (Storable st : objectlist) {
             int result = 0;
             try {
-                result = st.compareTo(getAnother(st));
+                Storable another = getAnother(st);
+                result = st.compareTo(another);
                 if (result != 0) {
-                    try {
-                        onChange();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    st = another;
+                    setInstance(st);
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -95,25 +125,35 @@ class Controller implements Runnable {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         return another;
     }
 
     Person getPerson() {
+        if (person == null)
+            person = new Person();
         return person;
     }
 
+    Person getPersonClone(Person input) {
+        return new Person(input);
+    }
+
     Organization getOrganization() {
+        if (organization == null)
+            organization = new Organization();
         return organization;
+    }
+
+    Organization getOrganizationClone(Organization input) {
+        return new Organization(input);
     }
 
     Storage getStorage() {
         return storage;
     }
 
-    void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
+    synchronized void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException {
         this.input = input;
         setsaveFlag();
@@ -121,13 +161,34 @@ class Controller implements Runnable {
 
     synchronized void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
         getStorage().readData(input);
+
     }
 
-    synchronized void setsaveFlag() {
+    void setsaveFlag() {
         saveFlag = saveFlag ? false : true;
     }
 
-    void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+    void setloadFlag() {
+        loadFlag = loadFlag ? false : true;
+    }
+
+    synchronized <T> void setInstance(T st) throws ParseException, IllegalAccessException, InterruptedException {
+        if (st.getClass().getName() == "Person")
+            person = (Person) st;
+        if (st.getClass().getName() == "Organization")
+            organization = (Organization) st;
+        try {
+            onChange();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    synchronized void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         for (ChangeHandler item : listener) {
             item.onChange();
         }

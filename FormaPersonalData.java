@@ -14,7 +14,7 @@ class FormaPersonalData implements ChangeHandler {
     private JTextField surname;
     private JFormattedTextField birthday;
     private JButton jbtnSave;
-    private Controller ctrl = new Controller();
+    private Controller ctrl = Controller.getController();
 
     FormaPersonalData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Person");
@@ -78,18 +78,10 @@ class FormaPersonalData implements ChangeHandler {
     }
 
     private void load() throws ParseException, IllegalAccessException, InterruptedException {
-        try {
-            ctrl.load(ctrl.getPerson());
-            name.setText(ctrl.getPerson().getName());
-            surname.setText(ctrl.getPerson().getSurname());
-            birthday.setValue(ctrl.getPerson().getBirthday());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        name.setText(ctrl.getPerson().getName());
+        surname.setText(ctrl.getPerson().getSurname());
+        birthday.setValue(ctrl.getPerson().getBirthday());
+
     }
 
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
@@ -97,9 +89,10 @@ class FormaPersonalData implements ChangeHandler {
         ctrl.getPerson().setName(name.getText());
         ctrl.getPerson().setSurname(surname.getText());
         ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
-        ctrl.saveInput(ctrl.getPerson());
+        ctrl.saveInput(ctrl.getPersonClone(ctrl.getPerson()));
     }
 
+    @Override
     public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         try {
             load();

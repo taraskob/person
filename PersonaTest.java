@@ -9,7 +9,7 @@ import java.util.List;
 public class PersonaTest {
     private Date date = new Date();
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY");
-    private Controller ctrl = new Controller();
+    private Controller ctrl;
     private List<ChangeHandler> listener = new ArrayList<>();
     private Organization organization = new Organization();
     private Person person = new Person();
