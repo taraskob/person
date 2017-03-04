@@ -105,6 +105,7 @@ public class Controller implements Runnable {
                 if (result != 0) {
                     st = another;
                     setInstance(st);
+                    onChange();
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -135,18 +136,10 @@ public class Controller implements Runnable {
         return person;
     }
 
-    Person getPersonClone(Person input) {
-        return new Person(input);
-    }
-
     Organization getOrganization() {
         if (organization == null)
             organization = new Organization();
         return organization;
-    }
-
-    Organization getOrganizationClone(Organization input) {
-        return new Organization(input);
     }
 
     Storage getStorage() {
@@ -177,15 +170,6 @@ public class Controller implements Runnable {
             person = (Person) st;
         if (st.getClass().getName() == "Organization")
             organization = (Organization) st;
-        try {
-            onChange();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     synchronized void onChange() throws ParseException, IllegalAccessException, InterruptedException {

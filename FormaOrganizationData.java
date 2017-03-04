@@ -75,7 +75,7 @@ class FormaOrganizationData implements ChangeHandler {
             NoSuchFieldException, NoSuchMethodException {
         ctrl.getOrganization().setName(name.getText());
         ctrl.getOrganization().setBusiness(business.getText());
-        ctrl.saveInput(ctrl.getOrganizationClone(ctrl.getOrganization()));
+        ctrl.saveInput(new Organization(ctrl.getOrganization()));
     }
 
     @Override

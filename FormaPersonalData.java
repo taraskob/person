@@ -89,7 +89,7 @@ class FormaPersonalData implements ChangeHandler {
         ctrl.getPerson().setName(name.getText());
         ctrl.getPerson().setSurname(surname.getText());
         ctrl.getPerson().setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
-        ctrl.saveInput(ctrl.getPersonClone(ctrl.getPerson()));
+        ctrl.saveInput(new Person(ctrl.getPerson()));
     }
 
     @Override
