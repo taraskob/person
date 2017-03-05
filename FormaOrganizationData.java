@@ -38,7 +38,7 @@ class FormaOrganizationData implements ChangeHandler {
             e.printStackTrace();
         }
         jbtnSave.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent le) {
+             public void actionPerformed(ActionEvent le) {
                 try {
                     saveinput();
                 } catch (IOException e) {
@@ -66,12 +66,12 @@ class FormaOrganizationData implements ChangeHandler {
         jfrm.setVisible(true);
     }
 
-    private void load() throws ParseException, IllegalAccessException, InterruptedException {
+    synchronized private void load() throws ParseException, IllegalAccessException, InterruptedException {
         name.setText(ctrl.getOrganization().getName());
         business.setText(ctrl.getOrganization().getBusiness());
     }
 
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
+    synchronized private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         Organization organization=ctrl.getOrganization();
         organization.setName(name.getText());
@@ -80,7 +80,7 @@ class FormaOrganizationData implements ChangeHandler {
     }
 
     @Override
-    public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+    synchronized public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         try {
             load();
         } catch (ParseException e) {

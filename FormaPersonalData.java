@@ -77,14 +77,14 @@ class FormaPersonalData implements ChangeHandler {
         jfrm.setVisible(true);
     }
 
-    private void load() throws ParseException, IllegalAccessException, InterruptedException {
+    synchronized private void load() throws ParseException, IllegalAccessException, InterruptedException {
         name.setText(ctrl.getPerson().getName());
         surname.setText(ctrl.getPerson().getSurname());
         birthday.setValue(ctrl.getPerson().getBirthday());
 
     }
 
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
+    synchronized private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         Person person=ctrl.getPerson();
         person.setName(name.getText());
@@ -94,7 +94,7 @@ class FormaPersonalData implements ChangeHandler {
     }
 
     @Override
-    public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+   synchronized public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         try {
             load();
         } catch (ParseException e) {

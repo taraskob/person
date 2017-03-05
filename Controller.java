@@ -29,6 +29,7 @@ public class Controller implements Runnable {
     private Organization organization = new Organization();
     private Person person = new Person();
     ArrayList<Storable> objectlist = new ArrayList<>();
+
     {
         objectlist.add(person);
         objectlist.add(organization);
@@ -40,6 +41,7 @@ public class Controller implements Runnable {
         listener.add(changeHandler);
     }
 
+    private int objectscompareresult;
     private Object input;
     Boolean saveFlag = false;
     Boolean loadFlag = true;
@@ -53,6 +55,18 @@ public class Controller implements Runnable {
     @Override
     public void run() {
         while (true) {
+            if (objectscompareresult != 0) {
+                try {
+                    onChange();
+                    objectscompareresult = 0;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             if (loadFlag) {
                 for (Storable st : objectlist) {
                     try {
@@ -95,16 +109,15 @@ public class Controller implements Runnable {
     }
 
 
-    void syncronizeobjects() throws InterruptedException {
+    synchronized void syncronizeobjects() throws InterruptedException {
         for (Storable st : objectlist) {
-            int result = 0;
+            objectscompareresult = 0;
             try {
                 Storable another = getAnother(st);
-                result = st.compareTo(another);
-                if (result != 0) {
+                objectscompareresult = st.compareTo(another);
+                if (objectscompareresult != 0) {
                     st = another;
                     setInstance(st);
-                    onChange();
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -167,7 +180,7 @@ public class Controller implements Runnable {
             organization = (Organization) st;
     }
 
-    synchronized void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+    void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         for (ChangeHandler item : listener) {
             item.onChange();
         }
