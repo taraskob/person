@@ -26,10 +26,9 @@ public class Controller implements Runnable {
         return ControllerHandler.CTRL;
     }
 
-    private Organization organization = getOrganization();
-    private Person person = getPerson();
+    private Organization organization = new Organization();
+    private Person person = new Person();
     ArrayList<Storable> objectlist = new ArrayList<>();
-
     {
         objectlist.add(person);
         objectlist.add(organization);
@@ -131,15 +130,11 @@ public class Controller implements Runnable {
     }
 
     Person getPerson() {
-        if (person == null)
-            person = new Person();
-        return person;
+        return new Person(person);
     }
 
     Organization getOrganization() {
-        if (organization == null)
-            organization = new Organization();
-        return organization;
+        return new Organization(organization);
     }
 
     Storage getStorage() {
