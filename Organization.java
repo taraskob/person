@@ -16,13 +16,12 @@ class Organization extends Storable {
         this(other.getName(), other.getBusiness());
     }
 
-    void setFields(String name, String business) {
-        synchronized (this) {
-            this.name = name;
-            this.business = business;
-        }
+   void setName(String name) {
+        this.name = name;
     }
-
+    void setBusiness(String business) {
+        this.business = business;
+    }
     String getName() {
         return name;
     }

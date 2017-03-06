@@ -32,14 +32,15 @@ class Person extends Storable {
         this(other.getName(), other.getSurname(), other.getBirthday());
     }
 
-    void serFields(String name, String surname, Date birthday) {
-        synchronized (this) {
-            this.name = name;
-            this.surname = surname;
-            this.birthday = birthday;
-        }
+    void setName(String name) {
+        this.name = name;
     }
-
+    void setSurname(String surname) {
+        this.surname = surname;
+    }
+    void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
     String getName() {
         return name;
     }

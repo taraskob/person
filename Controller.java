@@ -36,11 +36,13 @@ public class Controller implements Runnable {
     }
 
     private Storage storage = new Storage();
+
     synchronized Person getPerson() {
         return new Person(person);
     }
 
     synchronized Organization getOrganization() {
+
         return new Organization(organization);
     }
 

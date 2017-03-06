@@ -87,7 +87,9 @@ class FormaPersonalData implements ChangeHandler {
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         Person person=ctrl.getPerson();
-        person.serFields(name.getText(),surname.getText(),new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+        person.setName(name.getText());
+        person.setSurname(surname.getText());
+        person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
         ctrl.saveInput(person);
     }
 
