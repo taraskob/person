@@ -36,6 +36,17 @@ public class Controller implements Runnable {
     }
 
     private Storage storage = new Storage();
+    synchronized Person getPerson() {
+        return new Person(person);
+    }
+
+    synchronized Organization getOrganization() {
+        return new Organization(organization);
+    }
+
+    Storage getStorage() {
+        return storage;
+    }
 
     void addToListener(ChangeHandler changeHandler) {
         listener.add(changeHandler);
@@ -142,17 +153,6 @@ public class Controller implements Runnable {
         return another;
     }
 
-    Person getPerson() {
-        return new Person(person);
-    }
-
-    Organization getOrganization() {
-        return new Organization(organization);
-    }
-
-    Storage getStorage() {
-        return storage;
-    }
 
     synchronized void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
             IllegalAccessException, ParseException, IOException {

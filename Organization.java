@@ -13,19 +13,18 @@ class Organization extends Storable {
     }
 
     Organization(Organization other) {
-        this(other.getName(),other.getBusiness());
+        this(other.getName(), other.getBusiness());
     }
 
-    void setName(String name) {
-        this.name = name;
+    void setFields(String name, String business) {
+        synchronized (this) {
+            this.name = name;
+            this.business = business;
+        }
     }
 
     String getName() {
         return name;
-    }
-
-    void setBusiness(String business) {
-        this.business = business;
     }
 
     String getBusiness() {

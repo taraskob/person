@@ -74,8 +74,7 @@ class FormaOrganizationData implements ChangeHandler {
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
         Organization organization=ctrl.getOrganization();
-        organization.setName(name.getText());
-        organization.setBusiness(business.getText());
+        organization.setFields(name.getText(),business.getText());
         ctrl.saveInput(organization);
     }
 
