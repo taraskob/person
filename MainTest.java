@@ -9,6 +9,7 @@ public class MainTest {
         try {
             pt.create_read();
             pt.write();
+            pt.synchronizetest();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
