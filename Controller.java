@@ -68,18 +68,6 @@ public class Controller implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if (objectscompareresult != 0) {
-                try {
-                    onChange();
-                    objectscompareresult = 0;
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
             if (loadFlag) {
                 for (Storable st : objectlist) {
                     try {
@@ -175,11 +163,12 @@ public class Controller implements Runnable {
         loadFlag = loadFlag ? false : true;
     }
 
-    synchronized <T> void setInstance(T st) throws ParseException, IllegalAccessException, InterruptedException {
+    <T> void setInstance(T st) throws ParseException, IllegalAccessException, InterruptedException {
         if (st.getClass().getName() == "Person")
             person = (Person) st;
         if (st.getClass().getName() == "Organization")
             organization = (Organization) st;
+        onChange();
     }
 
     void onChange() throws ParseException, IllegalAccessException, InterruptedException {

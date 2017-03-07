@@ -54,7 +54,7 @@ class Person extends Storable {
     }
 
     @Override
-    synchronized public int compareTo(Object o) {
+    public int compareTo(Object o) {
         Person another = (Person) o;
         int result = this.name.compareTo(another.name);
         if (result != 0) {

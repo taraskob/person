@@ -31,7 +31,7 @@ class Organization extends Storable {
     }
 
     @Override
-    synchronized public int compareTo(Object o) {
+    public int compareTo(Object o) {
         Organization another = (Organization) o;
         int result = this.name.compareTo(another.name);
         if (result != 0) {
