@@ -54,7 +54,6 @@ public class Controller implements Runnable {
         listener.add(changeHandler);
     }
 
-    private int objectscompareresult;
     private Object input;
     Boolean saveFlag = false;
     Boolean loadFlag = true;
@@ -68,20 +67,6 @@ public class Controller implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if (loadFlag) {
-                for (Storable st : objectlist) {
-                    try {
-                        load(st);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                setloadFlag();
-            }
             if (saveFlag) {
                 try {
                     getStorage().writeData(input);
@@ -100,35 +85,45 @@ public class Controller implements Runnable {
             }
 
             try {
-                syncronizeobjects();
-                t.sleep(10000);
+                for (Storable st : objectlist) {
+                    if (loadFlag) load(st);
+                    if (synchronizedobjects(st))
+                        onChange();
+                }
+                loadFlag = false;
+                t.sleep(5000);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-
-    synchronized void syncronizeobjects() throws InterruptedException {
-        for (Storable st : objectlist) {
-            objectscompareresult = 0;
-            try {
-                Storable another = getAnother(st);
-                objectscompareresult = st.compareTo(another);
-                if (objectscompareresult != 0) {
-                    st = another;
-                    setInstance(st);
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
             } catch (ParseException e) {
                 e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
     }
+
+
+    synchronized boolean synchronizedobjects(Storable st) throws InterruptedException {
+
+        try {
+            Storable another = getAnother(st);
+            int objectscompareresult = st.compareTo(another);
+            if (objectscompareresult != 0) {
+                st = another;
+                setInstance(st);
+                return true;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     synchronized <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException,
             InterruptedException, ParseException {
@@ -159,16 +154,11 @@ public class Controller implements Runnable {
         saveFlag = saveFlag ? false : true;
     }
 
-    void setloadFlag() {
-        loadFlag = loadFlag ? false : true;
-    }
-
     <T> void setInstance(T st) throws ParseException, IllegalAccessException, InterruptedException {
         if (st.getClass().getName() == "Person")
             person = (Person) st;
         if (st.getClass().getName() == "Organization")
             organization = (Organization) st;
-        onChange();
     }
 
     void onChange() throws ParseException, IllegalAccessException, InterruptedException {
