@@ -2,11 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.DateFormatter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.*;
 import java.util.*;
-import java.util.List;
+
 
 class FormaPersonalData implements ChangeHandler {
     private DateFormat df;
