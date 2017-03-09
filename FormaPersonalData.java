@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.*;
 import java.util.*;
+import java.util.List;
 
 class FormaPersonalData implements ChangeHandler {
     private DateFormat df;
@@ -15,7 +16,7 @@ class FormaPersonalData implements ChangeHandler {
     private JFormattedTextField birthday;
     private JButton jbtnSave;
     private Controller ctrl = Controller.getController();
-
+    private FormListener listener=ctrl;
     FormaPersonalData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Person");
         jfrm.getContentPane().setLayout(new FlowLayout());
@@ -46,6 +47,7 @@ class FormaPersonalData implements ChangeHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         jbtnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent le) {
                 try {
@@ -86,14 +88,15 @@ class FormaPersonalData implements ChangeHandler {
 
     private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException, NoSuchMethodException {
-        Person person=ctrl.getPerson();
+        Person person = ctrl.getPerson();
         person.setName(name.getText());
         person.setSurname(surname.getText());
         person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
-        ctrl.saveInput(person);
+        listener.onSave(person);
+     //   ctrl.saveInput(person);
     }
 
-    @Override
+   @Override
     public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         try {
             load();

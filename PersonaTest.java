@@ -59,22 +59,16 @@ public class PersonaTest {
             String testresult = st.getClass().getName() + " - Write data test result is ";
             int result = 0;
             try {
-                ctrl.saveInput(st);
+                ctrl.onSave(st);
                 result = st.compareTo(ctrl.getAnother(st));
                 if (result == 0)
                     testresult += "OK";
                 else
                     testresult += "negative";
                 getResult(testresult);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
                 e.printStackTrace();

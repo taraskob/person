@@ -1,10 +1,12 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller implements Runnable {
+public class Controller implements Runnable,FormListener {
     private List<ChangeHandler> listener = new ArrayList<>();
 
     private Controller() {
@@ -67,37 +69,30 @@ public class Controller implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if (saveFlag) {
-                try {
-                    getStorage().writeData(input);
-                    setsaveFlag();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-
             try {
                 for (Storable st : objectlist) {
+                    if (saveFlag) {
+                        getStorage().writeData(input);
+                        saveFlag = false;
+                    }
                     if (loadFlag) load(st);
                     if (synchronizedobjects(st))
                         onChange();
                 }
                 loadFlag = false;
-                t.sleep(5000);
+                t.sleep(10000);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ParseException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }
@@ -138,20 +133,15 @@ public class Controller implements Runnable {
         return another;
     }
 
-
-    synchronized void saveInput(Object input) throws InvocationTargetException, NoSuchFieldException,
-            IllegalAccessException, ParseException, IOException {
-        this.input = input;
-        setsaveFlag();
+    @Override
+    synchronized public void onSave(Object obj) {
+        this.input = obj;
+        saveFlag = true;
     }
-
+    
     synchronized void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
         getStorage().readData(input);
 
-    }
-
-    void setsaveFlag() {
-        saveFlag = saveFlag ? false : true;
     }
 
     <T> void setInstance(T st) throws ParseException, IllegalAccessException, InterruptedException {
@@ -161,7 +151,7 @@ public class Controller implements Runnable {
             organization = (Organization) st;
     }
 
-    void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+     void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         for (ChangeHandler item : listener) {
             item.onChange();
         }
