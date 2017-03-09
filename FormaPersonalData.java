@@ -16,7 +16,6 @@ class FormaPersonalData implements ChangeHandler {
     private JFormattedTextField birthday;
     private JButton jbtnSave;
     private Controller ctrl = Controller.getController();
-    private FormListener listener = ctrl;
 
     FormaPersonalData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Person");
@@ -82,11 +81,7 @@ class FormaPersonalData implements ChangeHandler {
         person.setName(name.getText());
         person.setSurname(surname.getText());
         person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
-        try {
-            listener.onSave(person);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        ctrl.saveInput(person);
     }
 
     @Override

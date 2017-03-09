@@ -12,7 +12,6 @@ class FormaOrganizationData implements ChangeHandler {
     private JTextField business;
     private JButton jbtnSave;
     private Controller ctrl = Controller.getController();
-    private FormListener listener = ctrl;
 
     FormaOrganizationData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Organization");
@@ -61,11 +60,7 @@ class FormaOrganizationData implements ChangeHandler {
         Organization organization = ctrl.getOrganization();
         organization.setName(name.getText());
         organization.setBusiness(business.getText());
-        try {
-            listener.onSave(organization);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        ctrl.saveInput(organization);
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller implements Runnable, FormListener {
+public class Controller implements Runnable {
     private List<ChangeHandler> listener = new ArrayList<>();
 
     private Controller() {
@@ -17,7 +17,6 @@ public class Controller implements Runnable, FormListener {
 
         static {
             CTRL = new Controller();
-
         }
     }
 
@@ -124,9 +123,9 @@ public class Controller implements Runnable, FormListener {
         return another;
     }
 
-    @Override
-    synchronized public void onSave(Object obj) {
-        this.input = obj;
+
+    synchronized void saveInput(Object input) {
+        this.input = input;
         saveFlag = true;
         t.interrupt();
         t = new Thread(this);

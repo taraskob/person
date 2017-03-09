@@ -59,7 +59,7 @@ public class PersonaTest {
             String testresult = st.getClass().getName() + " - Write data test result is ";
             int result = 0;
             try {
-                ctrl.onSave(st);
+                ctrl.saveInput(st);
                 result = st.compareTo(ctrl.getAnother(st));
                 if (result == 0)
                     testresult += "OK";
