@@ -9,8 +9,7 @@ import java.util.Date;
 public class Storage {
     private File file;
 
-    synchronized void writeData(Object input) throws IOException, IllegalAccessException, NoSuchFieldException,
-            InvocationTargetException, ParseException {
+    synchronized void writeData(Object input) throws IllegalAccessException {
         String filename = getFilename(input.getClass());
         try {
             sourcexists(filename);

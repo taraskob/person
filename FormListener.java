@@ -1,3 +1,3 @@
 interface FormListener {
-    void onSave(Object obj);
+    void onSave(Object obj) throws IllegalAccessException;
 }

@@ -16,7 +16,8 @@ class FormaPersonalData implements ChangeHandler {
     private JFormattedTextField birthday;
     private JButton jbtnSave;
     private Controller ctrl = Controller.getController();
-    private FormListener listener=ctrl;
+    private FormListener listener = ctrl;
+
     FormaPersonalData() throws ParseException, IllegalAccessException {
         JFrame jfrm = new JFrame("Person");
         jfrm.getContentPane().setLayout(new FlowLayout());
@@ -38,33 +39,23 @@ class FormaPersonalData implements ChangeHandler {
         birthday.setValue(new Date());
         jbtnSave = new JButton("Save Personal Data");
         ctrl.addToListener(this);
-        try {
+        {
             load();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         jbtnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent le) {
+
                 try {
-                    saveinput();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        saveinput();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
                 }
+
             }
         });
         jfrm.getContentPane().add(new JLabel("Name    "));
@@ -79,34 +70,28 @@ class FormaPersonalData implements ChangeHandler {
         jfrm.setVisible(true);
     }
 
-    private void load() throws ParseException, IllegalAccessException, InterruptedException {
+    private void load() {
         name.setText(ctrl.getPerson().getName());
         surname.setText(ctrl.getPerson().getSurname());
         birthday.setValue(ctrl.getPerson().getBirthday());
 
     }
 
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
-            NoSuchFieldException, NoSuchMethodException {
+    private void saveinput() throws ParseException, IllegalAccessException{
         Person person = ctrl.getPerson();
         person.setName(name.getText());
         person.setSurname(surname.getText());
         person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
-        listener.onSave(person);
-     //   ctrl.saveInput(person);
-    }
-
-   @Override
-    public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         try {
-            load();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            listener.onSave(person);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onChange() {
+        load();
     }
 }
 

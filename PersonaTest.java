@@ -68,9 +68,7 @@ public class PersonaTest {
                 getResult(testresult);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
+            }  catch (InstantiationException e) {
                 e.printStackTrace();
             }
         }

@@ -29,32 +29,17 @@ class FormaOrganizationData implements ChangeHandler {
         business.setColumns(15);
         jbtnSave = new JButton("Save Organization Data");
         ctrl.addToListener(this);
-        try {
+        {
             load();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         jbtnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent le) {
                 try {
                     saveinput();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
                 }
+
             }
         });
         jfrm.getContentPane().add(new JLabel("Name     "));
@@ -67,30 +52,27 @@ class FormaOrganizationData implements ChangeHandler {
         jfrm.setVisible(true);
     }
 
-    private void load() throws ParseException, IllegalAccessException, InterruptedException {
+    private void load() {
         name.setText(ctrl.getOrganization().getName());
         business.setText(ctrl.getOrganization().getBusiness());
     }
 
-    private void saveinput() throws IOException, ParseException, IllegalAccessException, InvocationTargetException,
-            NoSuchFieldException, NoSuchMethodException {
+    private void saveinput() throws IllegalAccessException {
         Organization organization = ctrl.getOrganization();
         organization.setName(name.getText());
         organization.setBusiness(business.getText());
-        listener.onSave(organization);
+        try {
+            listener.onSave(organization);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
-        try {
-            load();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        load();
+
     }
 }
 

@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller implements Runnable,FormListener {
+public class Controller implements Runnable, FormListener {
     private List<ChangeHandler> listener = new ArrayList<>();
 
     private Controller() {
@@ -16,11 +16,8 @@ public class Controller implements Runnable,FormListener {
         private static Controller CTRL;
 
         static {
-            try {
-                CTRL = new Controller();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            CTRL = new Controller();
+
         }
     }
 
@@ -70,11 +67,12 @@ public class Controller implements Runnable,FormListener {
     public void run() {
         while (true) {
             try {
+                if (saveFlag) {
+                    getStorage().writeData(input);
+                    saveFlag = false;
+                }
                 for (Storable st : objectlist) {
-                    if (saveFlag) {
-                        getStorage().writeData(input);
-                        saveFlag = false;
-                    }
+
                     if (loadFlag) load(st);
                     if (synchronizedobjects(st))
                         onChange();
@@ -83,23 +81,17 @@ public class Controller implements Runnable,FormListener {
                 t.sleep(10000);
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
+                return;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
     }
 
 
-    synchronized boolean synchronizedobjects(Storable st) throws InterruptedException {
+    synchronized boolean synchronizedobjects(Storable st) throws InterruptedException, IllegalAccessException {
 
         try {
             Storable another = getAnother(st);
@@ -109,7 +101,7 @@ public class Controller implements Runnable,FormListener {
                 setInstance(st);
                 return true;
             }
-        } catch (IllegalAccessException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -120,12 +112,11 @@ public class Controller implements Runnable,FormListener {
     }
 
 
-    synchronized <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException,
-            InterruptedException, ParseException {
+    synchronized <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, InterruptedException {
         T another = (T) synclass.getClass().newInstance();
         try {
             load(another);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | InterruptedException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -137,8 +128,11 @@ public class Controller implements Runnable,FormListener {
     synchronized public void onSave(Object obj) {
         this.input = obj;
         saveFlag = true;
+        t.interrupt();
+        t = new Thread(this);
+        t.start();
     }
-    
+
     synchronized void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
         getStorage().readData(input);
 
@@ -151,7 +145,7 @@ public class Controller implements Runnable,FormListener {
             organization = (Organization) st;
     }
 
-     void onChange() throws ParseException, IllegalAccessException, InterruptedException {
+    void onChange() throws ParseException, IllegalAccessException, InterruptedException {
         for (ChangeHandler item : listener) {
             item.onChange();
         }
