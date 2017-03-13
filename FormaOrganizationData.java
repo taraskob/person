@@ -56,16 +56,16 @@ class FormaOrganizationData implements ChangeHandler {
 
     private void saveinput() throws IllegalAccessException {
         Organization organization = ctrl.getOrganization();
-        organization.setName(name.getText());
-        organization.setBusiness(business.getText());
+     //   organization.setName(name.getText());
+     //   organization.setBusiness(business.getText());
+
+        organization.setFields(name.getText(),business.getText());
         ctrl.saveInput(organization);
     }
 
     @Override
     public void onChange() throws ParseException, IllegalAccessException, InterruptedException {
-
         load();
-
     }
 }
 

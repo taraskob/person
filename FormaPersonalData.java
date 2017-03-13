@@ -44,17 +44,15 @@ class FormaPersonalData implements ChangeHandler {
             public void actionPerformed(ActionEvent le) {
 
                 try {
-                    try {
-                        saveinput();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+                    saveinput();
                 } catch (ParseException e) {
                     e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-
             }
         });
+
         jfrm.getContentPane().add(new JLabel("Name    "));
         jfrm.getContentPane().add(name);
         jfrm.getContentPane().add(new JLabel("Surname "));
@@ -74,11 +72,13 @@ class FormaPersonalData implements ChangeHandler {
 
     }
 
-    private void saveinput() throws ParseException, IllegalAccessException{
+    private void saveinput() throws ParseException, IllegalAccessException {
         Person person = ctrl.getPerson();
-        person.setName(name.getText());
-        person.setSurname(surname.getText());
-        person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+        // person.setName(name.getText());
+        // person.setSurname(surname.getText());
+        // person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+
+        person.setFields(name.getText(), surname.getText(), new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
         ctrl.saveInput(person);
     }
 

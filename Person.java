@@ -35,12 +35,21 @@ class Person extends Storable {
     void setName(String name) {
         this.name = name;
     }
+
     void setSurname(String surname) {
         this.surname = surname;
     }
+
     void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+    void setFields(String name, String surname, Date birthday) {
+        this.name = name;
+        this.surname = surname;
+        this.birthday = birthday;
+    }
+
     String getName() {
         return name;
     }

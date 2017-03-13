@@ -1,12 +1,7 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Controller implements Runnable {
+class Controller implements Runnable {
     private List<ChangeHandler> listener = new ArrayList<>();
 
     private Controller() {
@@ -36,12 +31,13 @@ public class Controller implements Runnable {
     private Storage storage = new Storage();
 
     synchronized Person getPerson() {
-        return new Person(person);
+         return person;
+      //  return new Person(person);
     }
 
     synchronized Organization getOrganization() {
-
-        return new Organization(organization);
+          return organization;
+       // return new Organization(organization);
     }
 
     Storage getStorage() {
@@ -52,9 +48,9 @@ public class Controller implements Runnable {
         listener.add(changeHandler);
     }
 
-    private Object input;
-    Boolean saveFlag = false;
     Boolean loadFlag = true;
+    Boolean saveFlag = false;
+    Object input;
     Thread t;
 
     {
@@ -66,9 +62,9 @@ public class Controller implements Runnable {
     public void run() {
         while (true) {
             try {
-                if (saveFlag) {
+                if(saveFlag) {
                     getStorage().writeData(input);
-                    saveFlag = false;
+                    saveFlag=false;
                 }
                 for (Storable st : objectlist) {
 
@@ -77,8 +73,8 @@ public class Controller implements Runnable {
                         onChange();
                 }
                 loadFlag = false;
-                t.sleep(10000);
 
+                t.sleep(10000);
             } catch (InterruptedException e) {
                 return;
             } catch (IllegalAccessException e) {
@@ -124,9 +120,9 @@ public class Controller implements Runnable {
     }
 
 
-    synchronized void saveInput(Object input) {
-        this.input = input;
-        saveFlag = true;
+    synchronized void saveInput(Object input) throws IllegalAccessException {
+        this.input=input;
+        saveFlag=true;
         t.interrupt();
         t = new Thread(this);
         t.start();
