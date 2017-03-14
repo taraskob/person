@@ -1,5 +1,6 @@
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 class Controller implements Runnable {
     private List<ChangeHandler> listener = new ArrayList<>();
@@ -52,7 +53,7 @@ class Controller implements Runnable {
     Boolean saveFlag = false;
     Object input;
     Thread t;
-
+ReentrantLock locker=new ReentrantLock();
     {
         t = new Thread(this);
         t.start();

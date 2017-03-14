@@ -24,7 +24,7 @@ class Organization extends Storable {
         this.business = business;
     }
 
-    void setFields(String name, String business) {
+    synchronized void setFields(String name, String business) {
         this.name = name;
         this.business = business;
     }

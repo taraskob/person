@@ -8,7 +8,7 @@ import java.util.Date;
 public class Storage {
     private File file;
 
-    synchronized void writeData(Object input) throws IllegalAccessException {
+     synchronized void writeData(Object input) throws IllegalAccessException {
         String filename = getFilename(input.getClass());
         try {
             sourcexists(filename);
@@ -30,7 +30,7 @@ public class Storage {
         }
     }
 
-    synchronized void sourcexists(String fileName) throws IOException {
+     synchronized void sourcexists(String fileName) throws IOException {
         file = new File(fileName);
         if (!file.exists()) {
             String line = "";
@@ -42,7 +42,7 @@ public class Storage {
         }
     }
 
-    synchronized void readData(Object input) throws IllegalAccessException, ParseException {
+     synchronized void readData(Object input) throws IllegalAccessException, ParseException {
         String filename = getFilename(input.getClass());
         StringBuilder line = new StringBuilder();
         try {
