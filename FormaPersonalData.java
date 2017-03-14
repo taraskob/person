@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.text.DateFormatter;
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 class FormaPersonalData implements ChangeHandler {
@@ -80,7 +81,8 @@ class FormaPersonalData implements ChangeHandler {
         // person.setSurname(surname.getText());
         // person.setBirthday(new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
 
-        person.setFields(name.getText(), surname.getText(), new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+            person.setFields(name.getText(), surname.getText(), new SimpleDateFormat("dd.MM.yyyy").parse(birthday.getText()));
+
         ctrl.saveInput(person);
     }
 

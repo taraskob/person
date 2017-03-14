@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.concurrent.locks.ReentrantLock;
 
 class FormaOrganizationData implements ChangeHandler {
     private JLabel jlab;
@@ -57,10 +58,11 @@ class FormaOrganizationData implements ChangeHandler {
 
     private void saveinput() throws IllegalAccessException {
         Organization organization = ctrl.getOrganization();
-     //   organization.setName(name.getText());
-     //   organization.setBusiness(business.getText());
+        //   organization.setName(name.getText());
+        //   organization.setBusiness(business.getText());
 
-        organization.setFields(name.getText(),business.getText());
+            organization.setFields(name.getText(), business.getText());
+
         ctrl.saveInput(organization);
     }
 

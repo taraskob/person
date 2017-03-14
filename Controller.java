@@ -32,13 +32,13 @@ class Controller implements Runnable {
     private Storage storage = new Storage();
 
     synchronized Person getPerson() {
-         return person;
-      //  return new Person(person);
+        return person;
+        //  return new Person(person);
     }
 
     synchronized Organization getOrganization() {
-          return organization;
-       // return new Organization(organization);
+        return organization;
+        // return new Organization(organization);
     }
 
     Storage getStorage() {
@@ -53,7 +53,8 @@ class Controller implements Runnable {
     Boolean saveFlag = false;
     Object input;
     Thread t;
-ReentrantLock locker=new ReentrantLock();
+    ReentrantLock locker = new ReentrantLock();
+
     {
         t = new Thread(this);
         t.start();
@@ -63,31 +64,33 @@ ReentrantLock locker=new ReentrantLock();
     public void run() {
         while (true) {
             try {
-                if(saveFlag) {
+                locker.lockInterruptibly();
+
+                if (saveFlag) {
                     getStorage().writeData(input);
-                    saveFlag=false;
+                    saveFlag = false;
                 }
                 for (Storable st : objectlist) {
-
                     if (loadFlag) load(st);
                     if (synchronizedobjects(st))
                         onChange();
                 }
                 loadFlag = false;
-
-                t.sleep(10000);
+                t.sleep(5000);
             } catch (InterruptedException e) {
                 return;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (ParseException e) {
                 e.printStackTrace();
+            } finally {
+                locker.unlock();
             }
         }
     }
 
 
-    synchronized boolean synchronizedobjects(Storable st) throws InterruptedException, IllegalAccessException {
+    boolean synchronizedobjects(Storable st) throws InterruptedException, IllegalAccessException {
 
         try {
             Storable another = getAnother(st);
@@ -108,7 +111,7 @@ ReentrantLock locker=new ReentrantLock();
     }
 
 
-    synchronized <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, InterruptedException {
+    <T> T getAnother(T synclass) throws IllegalAccessException, InstantiationException, InterruptedException {
         T another = (T) synclass.getClass().newInstance();
         try {
             load(another);
@@ -121,15 +124,15 @@ ReentrantLock locker=new ReentrantLock();
     }
 
 
-    synchronized void saveInput(Object input) throws IllegalAccessException {
-        this.input=input;
-        saveFlag=true;
+    void saveInput(Object input) throws IllegalAccessException {
+        this.input = input;
+        saveFlag = true;
         t.interrupt();
         t = new Thread(this);
         t.start();
     }
 
-    synchronized void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
+    void load(Object input) throws ParseException, IllegalAccessException, InterruptedException {
         getStorage().readData(input);
 
     }

@@ -41,7 +41,7 @@ class Person extends Storable {
         this.birthday = birthday;
     }
 
-    synchronized void setFields(String name, String surname, Date birthday) {
+     void setFields(String name, String surname, Date birthday) {
         this.name = name;
         this.surname = surname;
         this.birthday = birthday;
