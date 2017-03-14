@@ -36,7 +36,12 @@ class Organization extends Storable {
     String getBusiness() {
         return business;
     }
+    Object[] getFields() {
 
+        Object[] fieldsvalues = new Object[]{this.name, this.business};
+
+        return fieldsvalues;
+    }
     @Override
     public int compareTo(Object o) {
         Organization another = (Organization) o;

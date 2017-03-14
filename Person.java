@@ -1,10 +1,7 @@
-import javax.swing.text.DateFormatter;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 class Person extends Storable {
     private String name;
@@ -60,6 +57,13 @@ class Person extends Storable {
 
     Date getBirthday() {
         return birthday;
+    }
+
+    Object[] getFields() {
+
+        Object[] fieldsvalues = new Object[]{this.name, this.surname, this.birthday};
+
+        return fieldsvalues;
     }
 
     @Override

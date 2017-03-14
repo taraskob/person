@@ -50,8 +50,9 @@ class FormaOrganizationData implements ChangeHandler {
     }
 
     private void load() {
-        name.setText(ctrl.getOrganization().getName());
-        business.setText(ctrl.getOrganization().getBusiness());
+        Object[] organization = ctrl.getOrganization().getFields();
+        name.setText((String) organization[0]);
+        business.setText((String) organization[1]);
     }
 
     private void saveinput() throws IllegalAccessException {

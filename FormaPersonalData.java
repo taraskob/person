@@ -66,9 +66,11 @@ class FormaPersonalData implements ChangeHandler {
     }
 
     private void load() {
-        name.setText(ctrl.getPerson().getName());
-        surname.setText(ctrl.getPerson().getSurname());
-        birthday.setValue(ctrl.getPerson().getBirthday());
+        Object[] person = ctrl.getPerson().getFields();
+
+        name.setText((String) person[0]);
+        surname.setText((String) person[1]);
+        birthday.setValue(person[2]);
 
     }
 
